@@ -9,10 +9,11 @@ Usage:
 ======
     from RajivPySms import RajivSmsModule
     
-    MyPager = RajivSmsModule()
+    MyPager = RajivSmsModule() # create a object to use RajivSmsModule
     
-    MyPager.login(UNAME='9876543210',PWD='way2smsPassword')
+    MyPager.login(UNAME='9876543210',PWD='way2smsPassword') # fill your way2sms login and password
     
-    MyPager.set_signature(" ~ By Rajiv")
+    MyPager.set_signature(" ~ By Rajiv") # This signature will be appended with every sms you are sending
     
     MyPager.send(RECEIVER = "9952113011", MESSAGE = "Good Morning, Have a nice day...")
+    

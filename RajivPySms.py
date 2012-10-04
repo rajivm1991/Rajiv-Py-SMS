@@ -57,7 +57,7 @@ class RajivSmsModule:
     def send(self,RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False):
         RECEIVER, MESSAGE = RECEIVER.strip(), MESSAGE.strip()
         if self.Login_status:
-            if MESSAGE == '':
+            if MESSAGE != '':
                 if len(RECEIVER) == 10:
                     length,parts,final_msg = self.check_message_size(MESSAGE)
                     if CONFIRM_BEFORE_SENDING and parts > 1:

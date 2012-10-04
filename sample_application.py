@@ -7,7 +7,7 @@ def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     else:
         RECEIVER    = raw_input("Receiver no: ")
         MESSAGE     = raw_input("Your msg: ")
-        MyPager.send(RECEIVER,MESSAGE)
+        MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
 
 def start_one_to_one_chat(MyPager, RECEIVER=False):
     'Its like sms chat, simultaneous message to single person'
@@ -15,7 +15,7 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
     begun = 'y'
     while begun == 'y':
         MESSAGE = raw_input("Your msg: ")
-        MyPager.send(RECEIVER,MESSAGE)
+        MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
         begun = raw_input("Want send another sms(y/n): ")
 
 def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=False):
@@ -30,20 +30,9 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
 
     if not MESSAGE:
         MESSAGE = raw_input("Your msg: ")
-    #======================= confirm before sending  ================
-    size,parts,msg = MyPager.check_message_size(MESSAGE)
-    print "message size: %d chars"%(size)
-    if parts != 1:
-        print "split into: %d parts"%(parts)
-    print "your message: %s"%(msg)
-    permit = raw_input("continue?(y/n) :")
-    if permit == 'n':
-        print "! sending process stopped.."
-        return False
-    #================================================================
-
+    
     for RECEIVER in RECEIVERS.split(','):
-        MyPager.send(RECEIVER,MESSAGE)
+        MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
     return True
 
 def main():

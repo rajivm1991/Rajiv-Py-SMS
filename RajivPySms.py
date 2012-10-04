@@ -2,27 +2,29 @@
 from time import sleep
 from textwrap import fill
 import getpass
+
+# global variables
+BOT_BROWSER = { 
+    'firefox' : 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/16.0.1-1.fc9 Firefox/13.0.1', # for Mozilla FireFox 13.0.1
+    'chrome'  : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/12.04 Chromium/18.0.1025.168 Chrome/18.0.1025.168 Safari/535.19', # for Google Chrome 18.0.1025.168
+    'safari'  : 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25', # for Apple Safari 6.0 Mobile/10A5355d
+}
+
+
 class RajivSmsModule:
-    HIDDEN, ACTION, CATEGORY = "instantsms", "sa65sdf656fdfd", "Friendship+Day"
-    SIGNATURE, USER = "", ""
-    SPLIT_OR_TRUNCATE = True
-    Login_status = False
+    USER                = ""
+    SPLIT_OR_TRUNCATE   = True  # True - split-mode ; False - truncate-mode
+    SIGNATURE           = ""
+    Login_status        = False
+    HIDDEN              = "instantsms"
+    CATEGORY            = "Friendship+Day"
+    ACTION              = "sa65sdf656fdfd"
+    MESSAGE_SERVICE     = "way2sms"
+
     def __init__(self):
         from mechanize import Browser
         self.browser = Browser()
-        # =============== Cheating with Bot Browser as =================
-        # 1.) Mozilla FireFox 13.0.1 
-        #self.browser.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/16.0.1-1.fc9 Firefox/13.0.1')]
-        
-        # 2.) Google Chrome 18.0.1025.168 
-        #self.browser.addheaders = [('User-agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/12.04 Chromium/18.0.1025.168 Chrome/18.0.1025.168 Safari/535.19')]
-        
-        # 3.) Apple Safari 6.0 Mobile/10A5355d 
-        self.browser.addheaders = [('User-agent', 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25')]
-        
-        # 4.) Apple Safari 5.1.3
-        #self.browser.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10')]
-        
+        self.browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )] # Cheating with Bot Browser as (firefor/chrome/safari)
         self.browser.method = "POST"
         
     def login(self,UNAME='',PWD=''):

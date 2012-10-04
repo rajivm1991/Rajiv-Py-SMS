@@ -32,8 +32,8 @@ class RajivSmsModule:
         print "Attempting to Login..."
         self.browser.open("http://site2.way2sms.com/Login1.action?username="+UNAME+"&password="+PWD)
         response = self.browser.response().info()
-        self.Login_status = False if 'pragma' in response else True
-        self.USER = UNAME if self.Login_status else "Please login again"
+        self.Login_status = 'pragma' not in response
+        self.USER = self.Login_status and UNAME or "Please login again"
         print "+++++++++++++ browser response ++++++++++++"
         print "+|","Login Successful" if self.Login_status else "Login Failed, check your mobile number & password."
         print "+|",self.browser.geturl().split('/')[-1].split('action;')[-1].replace('?','\n+| ').replace('=',' : ')

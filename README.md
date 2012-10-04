@@ -5,6 +5,11 @@ An easy to use Python module for sending SMS.
 
 This module currently supports sending sms through Way2Sms.
 
+Pre-Requirements:
+-----------------
+we need a python package called "mechanize"
+you can install it through **easy_install mechanize** or the other ways as shown here http://wwwsearch.sourceforge.net/mechanize/download.html
+
 Usage:
 ------
     from RajivPySms import RajivSmsModule
@@ -27,8 +32,8 @@ for the above sending command, the message sent will be look like
 
 Note:
 -----
-1. your mobile number will be prepended with your message text
-2. the '&' symbol will be changed to 'and'
-3. the signature text will be appended with your message text
+- your mobile number will be prepended with your message text
+- the '&' symbol will be changed to 'and'
+- the signature text will be appended with your message text
 
 - - -

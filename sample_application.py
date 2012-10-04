@@ -20,19 +20,30 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
 
 def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=False):
     'Its like group sms: Send a message to "comma seperated numbers" OR "all contacts in a csv file"'
-    if not CONTACT_CSV_FILE:
-        if not RECEIVERS:
-            RECEIVERS = raw_input("Receivers no(comma seperated): ")
-    else:
-        RECEIVERS = ''
-        for contact in open(CONTACT_CSV_FILE,'r'):
-            RECEIVERS += contact.split(',')[1]+','
+    if not CONTACT_CSV_FILE and not RECEIVERS:
+        print """
++---+------+------+------+------+------+------+------+-----+
+|                     Group SMS option:                    |
+| m - manually enter some comma seperated receiver numbers |
+| c - csv file name containing list of contacts            |
++---+------+------+------+------+------+------+------+-----+
+"""
+        option = raw_input('Select your option: ')
+        if option == 'm':
+            RECEIVERS = raw_input("Receivers numbers(comma seperated): ")
+            RECEIVERS = RECEIVERS.split(',')
+        elif option == 'c':
+            CONTACT_CSV_FILE = raw_input("Contact csv file name: ")
+            RECEIVERS = [ contact.split(',')[1] for contact in open(CONTACT_CSV_FILE,'r') ]
 
-    if not MESSAGE:
-        MESSAGE = raw_input("Your msg: ")
+    elif RECEIVERS: RECEIVERS = RECEIVERS.split(',')
+
+    elif CONTACT_CSV_FILE: RECEIVERS = [ contact.split(',')[1] for contact in open(CONTACT_CSV_FILE,'r') ]
+
+    if not MESSAGE: MESSAGE = raw_input("Your msg: ")
     
-    for RECEIVER in RECEIVERS.split(','):
-        MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+    for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+
     return True
 
 def main():
@@ -42,7 +53,7 @@ def main():
     while option != 'x':
         print """
 +---+------+------+------+------+------+------+
-|                    Options                  |
+|              Main Menu Options              |
 | i - Instant SMS                             |
 | c - Chat                                    |
 | g - Group SMS                               |

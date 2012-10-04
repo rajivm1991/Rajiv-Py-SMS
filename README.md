@@ -6,7 +6,7 @@ An easy to use Python module for sending SMS.
 This module currently supports sending sms through Way2Sms.
 
 Usage:
-======
+------
     from RajivPySms import RajivSmsModule
     
     MyPager = RajivSmsModule()                              # create a object to use RajivSmsModule
@@ -26,8 +26,9 @@ for the above sending command, the message sent will be look like
     Have a nice day and night... ~ By Rajiv
 
 Note:
-    1. your mobile number will be prepended with your message text
-    2. the '&' symbol will be changed to 'and'
-    3. the signature text will be appended with your message text
+-----
+1. your mobile number will be prepended with your message text
+2. the '&' symbol will be changed to 'and'
+3. the signature text will be appended with your message text
 
-
+- - -

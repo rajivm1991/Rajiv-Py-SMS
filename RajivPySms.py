@@ -9,14 +9,16 @@ BOT_BROWSER = {
     'chrome'  : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/12.04 Chromium/18.0.1025.168 Chrome/18.0.1025.168 Safari/535.19', # for Google Chrome 18.0.1025.168
     'safari'  : 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25', # for Apple Safari 6.0 Mobile/10A5355d
 }
-SERVICE_URL = {
+SERVICE_DATA = {
     'way2sms' : {   
-        'login' : "'http://site2.way2sms.com/Login1.action?username=%s&password=%s'%(UNAME,PWD)",
-        'send'  : "'http://site2.way2sms.com/quicksms.action?MobNo=%s&textArea=%s&HiddenAction=%s&Action=%s&catnamedis=%s'%(RECEIVER,MSG,HIDDEN,ACTION,CATEGORY)",
+        'login'         : "'http://site2.way2sms.com/Login1.action?username=%s&password=%s'%(UNAME,PWD)",
+        'send'          : "'http://site2.way2sms.com/quicksms.action?MobNo=%s&textArea=%s&HiddenAction=%s&Action=%s&catnamedis=%s'%(RECEIVER,MSG,HIDDEN,ACTION,CATEGORY)",
+        'allowed_chars' : 130,
     },
     '160by2'  : {
-        'login' : "'http://www.160by2.com/re-login?username=%s&password=%s&button=Login'%(UNAME,PWD)",
-        'send'  : "'http://www.160by2.com/SendSMSAction?hid_exists=no&action1=%s&mobile1=%s&msg1=%s&btnsendsms=Send+Now'%(ACTION,RECEIVER,MSG)",
+        'login'         : "'http://www.160by2.com/re-login?username=%s&password=%s&button=Login'%(UNAME,PWD)",
+        'send'          : "'http://www.160by2.com/SendSMSAction?hid_exists=no&action1=%s&mobile1=%s&msg1=%s&btnsendsms=Send+Now'%(ACTION,RECEIVER,MSG)",
+        'allowed_chars' : 140,
     },
 }
 class RajivSmsModule:
@@ -60,25 +62,28 @@ class RajivSmsModule:
         if SIGNATURE != None:          self.SIGNATURE = SIGNATURE.replace(' ','+')
         if SPLIT_OR_TRUNCATE != None:  self.SPLIT_OR_TRUNCATE = SPLIT_OR_TRUNCATE
         if SERVICE != None:
-            if SERVICE in SERVICE_URL: self.SERVICE = SERVICE
+            if SERVICE in SERVICE_DATA: self.SERVICE = SERVICE
 
-        data = { 'SIGNATURE'         : self.SIGNATURE,
+        data = { 'SIGNATURE'         : self.SIGNATURE.replace('+',' '),
                  'SPLIT_OR_TRUNCATE' : self.SPLIT_OR_TRUNCATE,
                  'Login_status'      : self.Login_status,
                  'USER'              : self.USER,
                  'SERVICE'           : self.SERVICE,
-                 'AVAILABLE_SERVICES': SERVICE_URL.keys(),
+                 'allowed_chars'     : SERVICE_DATA[ self.SERVICE ][ 'allowed_chars' ],
+                 'AVAILABLE_SERVICES': SERVICE_DATA.keys(),
                  }
         
         return data
 
     def check_message_size(self, MESSAGE):
+        allowed_chars = SERVICE_DATA[ self.SERVICE ][ 'allowed_chars' ]
         MESSAGE = MESSAGE.replace('&','and').strip() + self.SIGNATURE.replace('+',' ')
-        parts = 1 if len(MESSAGE)<130 else ( (len(MESSAGE)/114) + (1 if len(MESSAGE)%114 else 0) )
+        parts = 1 if len(MESSAGE)<allowed_chars else ( (len(MESSAGE)/(allowed_chars-16)) + (1 if len(MESSAGE)%(allowed_chars-16) else 0) )
         return len(MESSAGE),parts,MESSAGE
 
     def send(self,RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False):
         RECEIVER, MESSAGE = RECEIVER.strip(), MESSAGE.strip()
+        allowed_chars = SERVICE_DATA[ self.SERVICE ][ 'allowed_chars' ]
         if self.Login_status:
             if MESSAGE != '':
                 if len(RECEIVER) == 10:
@@ -94,10 +99,11 @@ class RajivSmsModule:
                         MSG_list.append( MESSAGE )
                     else:
                         if self.SPLIT_OR_TRUNCATE:
-                            MESSAGE = fill(MESSAGE, width=114, fix_sentence_endings=True).split('\n')
+                            MESSAGE = fill(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True).split('\n')
+                            #multipart sms append text like --> ' [part 01 of 03]' with every part of sms
                             MSG_list = [ (MESSAGE[i]+' [part %0.2d of %0.2d]'%(i+1,len(MESSAGE))).replace(' ','+') for i in range(len(MESSAGE)) ]
                         else:
-                            MSG_list.append( MESSAGE[:130].replace(' ','+') )
+                            MSG_list.append( MESSAGE[:allowed_chars].replace(' ','+') )
                     try:
                         part,total = 1,len(MSG_list)
                         for MSG in MSG_list:
@@ -137,10 +143,10 @@ def print_browser_response(browser):
     return status
 
 def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
-    HIDDEN      = "instantsms"
-    CATEGORY    = "Friendship+Day"
-    ACTION      = "sa65sdf656fdfd"
-    URL = eval(SERVICE_URL[ SERVICE ][ TYPE ])
+    HIDDEN   = "instantsms"
+    CATEGORY = "Friendship+Day"
+    ACTION   = "sa65sdf656fdfd"
+    URL      = eval(SERVICE_DATA[ SERVICE ][ TYPE ])
     return URL
 
 def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):

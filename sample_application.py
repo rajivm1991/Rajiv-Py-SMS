@@ -72,23 +72,37 @@ def main():
     while option != 'x':
         conf_data = MyPager.config()
         print """
++---+------+------+------+------+------+------+     
+|              Main Menu Options              |     
+| i - Instant SMS                             |     +---+---+---Pager Status:--+---+---+
+| c - Chat                                    |     SMS provider : %s           
+| g - Group SMS                               |     Current USER : %s   
+| a - Sms to all contacts in sms_contact.csv  |     User SIGN    : %s
+| d - Select different Service                |     Login Status : %s
+| s - set/change signature                    |     +---+---+---+---+---+---+---+---+---+
+| l - login/re-login                          |
+| x - Exit                                    |
 +---+------+------+------+------+------+------+
-|              Main Menu Options              |
-| i - Instant SMS                             |
-| c - Chat                                    |
-| g - Group SMS                               |
-| a - Sms to all contacts in sms_contact.csv  |
-| s - set/change signature                    | (current sign: '%s')
-| l - login/re-login                          | (current user: %s)
-| x - Exit                                    | (login status: %s)
-+---+------+------+------+------+------+------+
-"""%(conf_data['SIGNATURE'],conf_data['USER'],'Logged in' if conf_data['Login_status'] else 'Logged out')
+"""%(   conf_data['SERVICE'],
+        conf_data['USER'],
+        conf_data['SIGNATURE'],
+        'Logged in' if conf_data['Login_status'] else 'Logged out'
+)
         option = raw_input('Select your option: ')
         if   option == 'i': send_instant_sms(MyPager)
         elif option == 'c': start_one_to_one_chat(MyPager)
         elif option == 'g': send_group_sms(MyPager)
         elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE="sms_contact.csv")
-        elif option == 's': MyPager.config(SIGNATURE = raw_input("enter your new sign: "));print "success!!"
+        elif option == 's': MyPager.config(SIGNATURE = raw_input("enter your new sign: "));print "done!!"
+        elif option == 'd':
+            AVAILABLE_SERVICES = MyPager.config()['AVAILABLE_SERVICES']
+            print "+---+------+------+------+-----+"
+            print "    Available SMS Services:     "
+            for service in AVAILABLE_SERVICES:
+                print "%d - %s"%( AVAILABLE_SERVICES.index(service)+1, service )
+            print "+---+------+------+------+-----+"
+            my_selection = raw_input("select your favourite service: ")
+            MyPager.config(SERVICE = AVAILABLE_SERVICES[ int(my_selection)-1 ]);print "done!!"
         elif option == 'l': MyPager.login()
         elif option != 'x': print 'invalid option'
 

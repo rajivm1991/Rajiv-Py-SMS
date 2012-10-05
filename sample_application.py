@@ -73,20 +73,24 @@ def main():
         conf_data = MyPager.config()
         print """
 +---+------+------+------+------+------+------+     
-|              Main Menu Options              |     
-| i - Instant SMS                             |     +---+---+---Pager Status:--+---+---+
-| c - Chat                                    |     SMS provider : %s           
-| g - Group SMS                               |     Current USER : %s   
-| a - Sms to all contacts in sms_contact.csv  |     User SIGN    : %s
-| d - Select different Service                |     Login Status : %s
-| s - set/change signature                    |     +---+---+---+---+---+---+---+---+---+
+|              Main Menu Options              |     +---+---+---+---+---Pager Status:---+---+---+---+---+
+| i - Instant SMS                             |     SMS Service    : %s
+| c - Chat                                    |     Allowed        : %d chars per sms
+| g - Group SMS                               |     Sending method : Sms > %d chars will be - %s
+| a - Sms to all contacts in sms_contact.csv  |     Current USER   : %s
+| d - Change Service                          |     Signature text : %s
+| t - Change Sending method                   |     Login Status   : %s
+| s - set/change signature                    |     +---+---+---+---+---+---+---+---+---+---+---+---+---+
 | l - login/re-login                          |
 | x - Exit                                    |
 +---+------+------+------+------+------+------+
 """%(   conf_data['SERVICE'],
+        conf_data['allowed_chars'],
+        conf_data['allowed_chars'],
+        'Split and send as multiple sms' if conf_data['SPLIT_OR_TRUNCATE'] else 'Truncate to %d chars'%(conf_data['allowed_chars']),
         conf_data['USER'],
         conf_data['SIGNATURE'],
-        'Logged in' if conf_data['Login_status'] else 'Logged out'
+        'Logged in' if conf_data['Login_status'] else 'Logged out',
 )
         option = raw_input('Select your option: ')
         if   option == 'i': send_instant_sms(MyPager)
@@ -103,6 +107,16 @@ def main():
             print "+---+------+------+------+-----+"
             my_selection = raw_input("select your favourite service: ")
             MyPager.config(SERVICE = AVAILABLE_SERVICES[ int(my_selection)-1 ]);print "done!!"
+        elif option == 't':
+            print """
++---+------+------+------+-----+
+| If sms > allowed characters: |
+| s - split and send           |
+| t - truncate and send        |
++---+------+------+------+-----+"""
+            my_sending_method = raw_input("select your sending method: ")
+            if   my_sending_method == 's': MyPager.config( SPLIT_OR_TRUNCATE = True )
+            elif my_sending_method == 't': MyPager.config( SPLIT_OR_TRUNCATE = False )
         elif option == 'l': MyPager.login()
         elif option != 'x': print 'invalid option'
 

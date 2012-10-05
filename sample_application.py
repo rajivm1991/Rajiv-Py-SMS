@@ -1,8 +1,13 @@
 #!/usr/bin/python
-from RajivPySms import RajivSmsModule
+from RajivPySms import RajivSmsModule,get_conformation
 
 def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     'instant sms to a receiver'
+    if not MyPager.config()['Login_status']: 
+        print '+++++++++++++++++++++++++'
+        print '+| Please login first  |+'
+        print '+++++++++++++++++++++++++'
+        return False
     if RECEIVER and MESSAGE: MyPager.send(RECEIVER,MESSAGE)
     else:
         RECEIVER    = raw_input("Receiver no: ")
@@ -11,6 +16,11 @@ def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
 
 def start_one_to_one_chat(MyPager, RECEIVER=False):
     'Its like sms chat, simultaneous message to single person'
+    if not MyPager.config()['Login_status']: 
+        print '+++++++++++++++++++++++++'
+        print '+| Please login first  |+'
+        print '+++++++++++++++++++++++++'
+        return False
     if not RECEIVER: RECEIVER = raw_input("Receiver no: ")
     begun = 'y'
     while begun == 'y':
@@ -19,6 +29,11 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
         begun = raw_input("Want send another sms(y/n): ")
 
 def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=False):
+    if not MyPager.config()['Login_status']: 
+        print '+++++++++++++++++++++++++'
+        print '+| Please login first  |+'
+        print '+++++++++++++++++++++++++'
+        return False
     'Its like group sms: Send a message to "comma seperated numbers" OR "all contacts in a csv file"'
     if not CONTACT_CSV_FILE and not RECEIVERS:
         print """
@@ -42,8 +57,12 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
 
     if not MESSAGE: MESSAGE = raw_input("Your msg: ")
     
-    for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+    length,parts,final_msg = MyPager.check_message_size(MESSAGE)
+    if get_conformation(length, parts, final_msg,SPLIT_OR_TRUNCATE = MyPager.config()['SPLIT_OR_TRUNCATE'] ) == 'n':
+        print "! sending process stopped.."
+        return False
 
+    for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False)
     return True
 
 def main():
@@ -51,6 +70,7 @@ def main():
     MyPager = RajivSmsModule()
     option = '0'
     while option != 'x':
+        conf_data = MyPager.config()
         print """
 +---+------+------+------+------+------+------+
 |              Main Menu Options              |
@@ -58,18 +78,17 @@ def main():
 | c - Chat                                    |
 | g - Group SMS                               |
 | a - Sms to all contacts in sms_contact.csv  |
-| s - set/change signature                    | (current sign: %s)
+| s - set/change signature                    | (current sign: '%s')
 | l - login/re-login                          | (current user: %s)
-| x - Exit                                    |
+| x - Exit                                    | (login status: %s)
 +---+------+------+------+------+------+------+
-"""%(MyPager.get_signature(),MyPager.get_user())
+"""%(conf_data['SIGNATURE'],conf_data['USER'],'Logged in' if conf_data['Login_status'] else 'Logged out')
         option = raw_input('Select your option: ')
         if   option == 'i': send_instant_sms(MyPager)
         elif option == 'c': start_one_to_one_chat(MyPager)
         elif option == 'g': send_group_sms(MyPager)
         elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE="sms_contact.csv")
-        elif option == 's': MyPager.set_signature(raw_input("enter your new sign: "));print "success!!"
-        elif option == 's': MyPager.set_signature(raw_input("enter your new sign: "));print "success!!"
+        elif option == 's': MyPager.config(SIGNATURE = raw_input("enter your new sign: "));print "success!!"
         elif option == 'l': MyPager.login()
         elif option != 'x': print 'invalid option'
 

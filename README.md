@@ -8,7 +8,7 @@ This module currently supports sending sms through Way2Sms.
 Pre-Requirements:
 -----------------
 we need a python package called "mechanize"
-you can install it through **easy_install mechanize** or the other ways as shown here http://wwwsearch.sourceforge.net/mechanize/download.html
+you can install it through **sudo pip install mechanize** or the other ways as shown here http://wwwsearch.sourceforge.net/mechanize/download.html
 
 Usage:
 ------

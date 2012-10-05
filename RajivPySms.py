@@ -12,7 +12,7 @@ BOT_BROWSER = {
 
 
 class RajivSmsModule:
-    USER                = ""
+    USER                = "No Logged in user"
     SPLIT_OR_TRUNCATE   = True  # True - split-mode ; False - truncate-mode
     SIGNATURE           = ""
     Login_status        = False
@@ -24,7 +24,8 @@ class RajivSmsModule:
     def __init__(self):
         from mechanize import Browser
         self.browser = Browser()
-        self.browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )] # Cheating with Bot Browser as (firefor/chrome/safari)
+        # This is really Cheating with Bot Browser as (firefor/chrome/safari)
+        self.browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
         self.browser.method = "POST"
         
     def login(self,UNAME='',PWD=''):
@@ -35,21 +36,24 @@ class RajivSmsModule:
         self.browser.open("http://site2.way2sms.com/Login1.action?username="+UNAME+"&password="+PWD)
         response = self.browser.response().info()
         self.Login_status = 'pragma' not in response
-        self.USER = self.Login_status and UNAME or "Please login again"
+        self.USER = self.Login_status and UNAME or 'No Logged in user'
         print "+++++++++++++ browser response ++++++++++++"
         print "+|","Login Successful" if self.Login_status else "Login Failed, check your mobile number & password."
         print "+|",self.browser.geturl().split('/')[-1].split('action;')[-1].replace('?','\n+| ').replace('=',' : ')
         print "+++++++++++++++++++++++++++++++++++++++++++"
         return self.Login_status
-
-    def set_signature(self, SIGNATURE):
-        self.SIGNATURE = SIGNATURE.replace(' ','+')
-
-    def get_signature(self):
-        return self.SIGNATURE.replace('+',' ')
-
-    def get_user(self):
-        return self.USER if self.USER else "Nobody logged in"
+    
+    def config(self, SIGNATURE=None, SPLIT_OR_TRUNCATE=None):
+        if SIGNATURE != None:          self.SIGNATURE = SIGNATURE.replace(' ','+')
+        if SPLIT_OR_TRUNCATE != None:  self.SPLIT_OR_TRUNCATE = SPLIT_OR_TRUNCATE
+        
+        data = { 'SIGNATURE'         : self.SIGNATURE,
+                 'SPLIT_OR_TRUNCATE' : self.SPLIT_OR_TRUNCATE,
+                 'Login_status'      : self.Login_status,
+                 'USER'              : self.USER,
+                 }
+        
+        return data
 
     def check_message_size(self, MESSAGE):
         MESSAGE = MESSAGE.replace('&','and').strip() + self.SIGNATURE.replace('+',' ')
@@ -62,9 +66,8 @@ class RajivSmsModule:
             if MESSAGE != '':
                 if len(RECEIVER) == 10:
                     length,parts,final_msg = self.check_message_size(MESSAGE)
-                    if CONFIRM_BEFORE_SENDING and parts > 1:
-                        allow = raw_input("your message will be splitted into %2d parts, do you want to proceed(y/n): "%(parts) if self.SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars, do you want to proceed sending(y/n): "%(length))
-                        if allow == 'n':
+                    if CONFIRM_BEFORE_SENDING:
+                        if get_conformation(length,parts,final_msg,self.SPLIT_OR_TRUNCATE) == 'n':
                             print "! sending process stopped.."
                             return False
                     print "sending msg to %s..."%(RECEIVER)
@@ -110,3 +113,14 @@ def print_browser_response(browser):
     print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     return status
 
+def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):
+    print "********* your message is ********"
+    print final_msg
+    print "**********************************"
+    allow = 'n'
+    if parts > 1:
+        allow = raw_input("your message will be splitted into %2d parts, do you want to proceed(y/n): "%(parts) if SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars, do you want to proceed sending(y/n): "%(length))
+    else:
+        allow = raw_input("do you want to proceed sending(y/n): ")
+    if allow != 'y': allow = 'n'
+    return allow

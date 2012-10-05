@@ -14,8 +14,8 @@ we need a python package called "mechanize"
 
 you can install it through **sudo pip install mechanize** or the other ways as shown here http://wwwsearch.sourceforge.net/mechanize/download.html
 
-Simple Usage steps:
--------------------
+Easy Usage Steps:
+-----------------
     from RajivPySms import RajivSmsModule
     
     MyPager = RajivSmsModule()                              # create a object to use RajivSmsModule
@@ -26,7 +26,8 @@ Simple Usage steps:
     MyPager.send(   RECEIVER = "9952113011", 
                     MESSAGE  = "Have a nice day & night..."
                 )                                           
-    # That's all, your sms has been sent...
+
+    # Wow!!!, your sms has been sent...
     
 for the above sending command, the message sent will be look like
 
@@ -35,8 +36,10 @@ for the above sending command, the message sent will be look like
 
 Note:
 -----
+
 - refer **sample_application.py** for more options and usages. sample_application.py is a stand-alone console app too :-)
 - for more information refer the wiki page of the project
 - your mobile number will be prepended with your message text
 - the '&' symbol will be changed to 'and'
+
 - - -

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from RajivPySms import RajivSmsModule,get_conformation
-
+import RajivPearlsAddon
 def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     'instant sms to a receiver'
     if not MyPager.config()['Login_status']: 
@@ -64,6 +64,21 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
 
     for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False)
     return True
+def rajivpearl_sms(MyPager):
+    print """
++---+------+------+------+------+------+
+|            Pearl SMS options         |
+| f - Current Forex Rates(USD-INR)     |
+| b - back to main menu                |
++---+------+------+------+------+------+
+"""
+    myoption = raw_input("Select your option: ")
+    if myoption == 'f':
+        print 'Requesting forex rates...'
+        MESSAGE = RajivPearlsAddon.get_forex_rate()
+        RECEIVER = raw_input('Enter receiver number: ')
+        MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+        
 
 def main():
     #======================= You can Run this program as a Stand Alone App ===========================
@@ -73,7 +88,8 @@ def main():
         conf_data = MyPager.config()
         print """
 +---+------+------+------+------+------+------+     
-|              Main Menu Options              |     +---+---+---+---+---Pager Status:---+---+---+---+---+
+|              Main Menu Options              |
+| r - Rajiv Pearl - Special messages          |     +---+---+---+---+---Pager Status:---+---+---+---+---+
 | i - Instant SMS                             |     SMS Service    : %s
 | c - Chat                                    |     Allowed        : %d chars per sms
 | g - Group SMS                               |     Sending method : Sms > %d chars will be - %s
@@ -93,7 +109,8 @@ def main():
         'Logged in' if conf_data['Login_status'] else 'Logged out',
 )
         option = raw_input('Select your option: ')
-        if   option == 'i': send_instant_sms(MyPager)
+        if   option == 'r': rajivpearl_sms(MyPager)
+        elif option == 'i': send_instant_sms(MyPager)
         elif option == 'c': start_one_to_one_chat(MyPager)
         elif option == 'g': send_group_sms(MyPager)
         elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE="sms_contact.csv")

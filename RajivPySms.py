@@ -77,8 +77,10 @@ class RajivSmsModule:
 
     def check_message_size(self, MESSAGE):
         allowed_chars = SERVICE_DATA[ self.SERVICE ][ 'allowed_chars' ]
-        MESSAGE = MESSAGE.replace('&','and').strip() + self.SIGNATURE.replace('+',' ')
-        parts = 1 if len(MESSAGE)<allowed_chars else ( (len(MESSAGE)/(allowed_chars-16)) + (1 if len(MESSAGE)%(allowed_chars-16) else 0) )
+        MESSAGE = MESSAGE.replace('&','and').strip()
+        if self.SIGNATURE: MESSAGE += '%0a' + self.SIGNATURE.replace('+',' ')
+        #parts = 1 if len(MESSAGE)<allowed_chars else ( (len(MESSAGE)/(allowed_chars-16)) + (1 if len(MESSAGE)%(allowed_chars-16) else 0) )
+        parts = len ( fill(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True).split('\n') )
         return len(MESSAGE),parts,MESSAGE
 
     def send(self,RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False):
@@ -93,15 +95,15 @@ class RajivSmsModule:
                             print "! sending process stopped.."
                             return False
                     print "sending msg to %s..."%(RECEIVER)
-                    MESSAGE = final_msg.replace(' ','+')
+                    MESSAGE = final_msg
                     MSG_list = []
                     if parts == 1:
-                        MSG_list.append( MESSAGE )
+                        MSG_list.append( MESSAGE.replace(' ','+') )
                     else:
                         if self.SPLIT_OR_TRUNCATE:
                             MESSAGE = fill(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True).split('\n')
                             #multipart sms append text like --> ' [part 01 of 03]' with every part of sms
-                            MSG_list = [ (MESSAGE[i]+' [part %0.2d of %0.2d]'%(i+1,len(MESSAGE))).replace(' ','+') for i in range(len(MESSAGE)) ]
+                            MSG_list = [ (MESSAGE[i].replace(' ','+')+' [part %0.2d of %0.2d]'%(i+1,len(MESSAGE))).replace(' ','+') for i in range(len(MESSAGE)) ]
                         else:
                             MSG_list.append( MESSAGE[:allowed_chars].replace(' ','+') )
                     try:
@@ -151,7 +153,7 @@ def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
 
 def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):
     print "********* your message is ********"
-    print final_msg
+    print final_msg.replace('%0a','\n')
     print "**********************************"
     allow = 'n'
     if parts > 1:

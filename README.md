@@ -7,6 +7,8 @@ This module currently supports following sms services
 
 - 160by2
 - Way2Sms
+- Site2sms (comming soon)
+- FullOnSms (comming soon)
 
 Pre-Requirements:
 -----------------
@@ -23,7 +25,7 @@ Easy Usage Steps:
     MyPager.login(  UNAME    = '7411129611',
                     PWD      = 'way2smsPassword')           # fill your way2sms login and password
     
-    MyPager.send(   RECEIVER = "9952113011", 
+    MyPager.send(   RECEIVER = "9952113011",
                     MESSAGE  = "Have a nice day & night..."
                 )                                           
 
@@ -33,6 +35,19 @@ for the above sending command, the message sent will be look like
 
     7411129611:
     Have a nice day and night...
+
+Rajiv-Pearls-Addon
+==================
+
+This Pearls Addon provides awesome resources to the Rajiv-Py-SMS module.
+
+Features of Rajiv-Pearls-Addon:
+-------------------------------
+
+- Forex-Rates of various country's Currencies up-to the current time lively from XE.com
+- Market Rates (comming soon)
+- Sensex (comming soon)
+
 
 Note:
 -----

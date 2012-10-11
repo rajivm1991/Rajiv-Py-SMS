@@ -58,7 +58,6 @@ Features of Rajiv-Pearls-Addon:
     *   GBP - United Kingdom Pounds
     *   HKD - Hong Kong Dollars
     *   HUF - Hungary Forint
-    *   INR - India Rupees
     *   JPY - Japan Yen
     *   MXN - Mexico Pesos
     *   MYR - Malaysia Ringgits

@@ -45,6 +45,32 @@ Features of Rajiv-Pearls-Addon:
 -------------------------------
 
 - Forex-Rates of various country's Currencies up-to the current time lively from XE.com
+
+    Supported currencies:
+    *   INR - India Rupees
+    *   USD - United States Dollars
+    *   AUD - Australia Dollars
+    *   CAD - Canada Dollars
+    *   CHF - Switzerland Francs
+    *   CNY - China Yuan Renminbi
+    *   DKK - Denmark Kroner
+    *   EUR - Euro
+    *   GBP - United Kingdom Pounds
+    *   HKD - Hong Kong Dollars
+    *   HUF - Hungary Forint
+    *   INR - India Rupees
+    *   JPY - Japan Yen
+    *   MXN - Mexico Pesos
+    *   MYR - Malaysia Ringgits
+    *   NOK - Norway Kroner
+    *   NZD - New Zealand Dollars
+    *   RUB - Russia Rubles
+    *   SEK - Sweden Kronor
+    *   SGD - Singapore Dollars
+    *   THB - Thailand Baht
+    *   USD - United States Dollars
+    *   ZAR - South Africa Rand
+
 - Market Rates (comming soon)
 - Sensex (comming soon)
 

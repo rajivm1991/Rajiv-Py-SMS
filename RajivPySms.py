@@ -2,6 +2,7 @@
 from time import sleep
 from textwrap import fill
 import getpass
+from BeautifulSoup import BeautifulSoup
 
 # global variables
 BOT_BROWSER = { 
@@ -40,20 +41,21 @@ class RajivSmsModule:
         if not PWD:   PWD   = getpass.getpass("Enter Your Password: ")
         UNAME, PWD = UNAME.strip(), PWD.strip()
         print "Attempting to Login..."
-        self.browser.open( generate_url( 
+        htmldata = self.browser.open( generate_url( 
                 SERVICE = self.SERVICE, 
                 TYPE    = 'login', 
                 UNAME   = UNAME,
                 PWD     = PWD
             )
         )
+        self.Login_status = Soup_check(htmldata.read())
         response = self.browser.response().info()
         #self.Login_status = 'pragma' not in response
-        self.Login_status = True
         self.USER = self.Login_status and UNAME or 'No Logged in user'
         print "+++++++++++++ browser response ++++++++++++"
         #print "+|","Login Successful" if self.Login_status else "Login Failed, check your mobile number & password."
-        print "+|",self.browser.geturl().split('/')[-1].split('action;')[-1].replace('?','\n+| ').replace('=',' : ')
+        #print "+|",self.browser.geturl().split('/')[-1].split('action;')[-1].replace('?','\n+| ').replace('=',' : ')
+        print self.browser.geturl().split('/')[-1]
         print "+++++++++++++++++++++++++++++++++++++++++++"
         return self.Login_status
         
@@ -140,7 +142,8 @@ def print_browser_response(browser):
     response = browser.response().info()
     status   = False if 'pragma' in response else True
     #print "+|",["response: Failure","response: Success"][status]
-    print "+|",browser.geturl().split('/')[-1].split('.action?')[-1]#.split('&')[0].split('=')[-1].replace('+',' ').replace('%3A',':')
+    #print "+|",browser.geturl().split('/')[-1].split('.action?')[-1]#.split('&')[0].split('=')[-1].replace('+',' ').replace('%3A',':')
+    print browser.geturl().split('/')[-1]
     print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     return status
 
@@ -163,3 +166,72 @@ def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):
     if allow != 'y': allow = 'n'
     return allow
 
+def Soup_check(html):
+    soup = BeautifulSoup(html)
+    w2sms_mobile_no = soup.find('div', attrs={"class" : "mobile-in"})
+    if w2sms_mobile_no:
+        print "++++++++++++++++++++ Way2Sms Login Detail +++++++++++++++++++"
+        name = soup.find('span', attrs={"onmouseover":"dismouout();"})
+        print "+| Name:",name.findAll(text=True)[0]
+        
+        Text_list = w2sms_mobile_no.findAll(text=True)
+        cut = ['\t','\n','\r','  ','.']
+        for text in Text_list[:]:
+            i = Text_list.index(text)
+            for s in cut: 
+                text = text.replace(s,'')
+            Text_list[i] = text
+            if not text: 
+                Text_list.remove(text)
+        print "+|",': '.join(Text_list)
+        
+        email = str(soup.find('input', attrs={"id":"logemail"}))
+        print "+| Email:",email[email.index('value=')+7:email.index('>')-3]
+
+        ips = soup.find('div', attrs={"class" : "item1 flt ip"})
+        Text_list = ips.findAll(text=True)
+        cut = ['&nbsp;', '\n', ' ']
+        for text in Text_list[:]:
+            i = Text_list.index(text)
+            for s in cut: 
+                text = text.replace(s,'')
+            Text_list[i] = text
+            if not text: 
+                Text_list.remove(text)
+        for i in range(0,len(Text_list),2): print "+|",Text_list[i],Text_list[i+1] if i+1 < len(Text_list) else ''
+        return True
+
+    acc_details = soup.find('div',attrs={"class" : "mad"} )
+    if acc_details:
+        print "++++++++++++++++++++ 160by2 Login Detail +++++++++++++++++++"
+        Text_list = acc_details.findAll(text=True)
+        rem = [u'Change Password', u'(Change)', u'\n' ]
+        cut = ['&nbsp;',]
+        for text in Text_list[:]:
+            if [x for x in rem if x in text]: 
+                Text_list.remove(text)
+            else:
+                i = Text_list.index(text)
+                for s in cut: 
+                    text = text.replace(s,'')
+                Text_list[i] = text
+                    
+        print "\n+|",Text_list[0]
+        for i in range(1,len(Text_list),3): print "+| %s%s %s"%(Text_list[i], Text_list[i+1] if i+1 < len(Text_list) else '' , Text_list[i+2] if i+2 < len(Text_list) else '' )
+
+        last_login = soup.find('div',attrs={"class" : "lh"} )
+        Text_list = last_login.findAll(text=True)
+        rem = [u'\n', u'about', u'view', u'button']
+        for text in Text_list[:]:
+            if [x for x in rem if x in text]: 
+                Text_list.remove(text)
+            else:
+                i = Text_list.index(text)
+                for s in cut: 
+                    text = text.replace(s,'')
+                Text_list[i] = text
+        print "\n+|",Text_list[0]
+        for i in range(1,len(Text_list),3): print "+| %s%s %s"%(Text_list[i], Text_list[i+1] if i+1 < len(Text_list) else '' , Text_list[i+2] if i+2 < len(Text_list) else '' )
+        return True
+        
+    return False

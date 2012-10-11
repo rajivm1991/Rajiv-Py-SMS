@@ -44,9 +44,9 @@ This Pearls Addon provides awesome resources to the Rajiv-Py-SMS module.
 Features of Rajiv-Pearls-Addon:
 -------------------------------
 
-- Forex-Rates of various country's Currencies up-to the current time lively from XE.com
+- Forex-Rates of various country's Currencies up-to the current time lively from **XE.com**
 
-    Supported currencies:
+    **Supported currencies:**
     *   INR - India Rupees
     *   USD - United States Dollars
     *   AUD - Australia Dollars

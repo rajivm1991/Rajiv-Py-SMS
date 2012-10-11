@@ -123,7 +123,9 @@ def main():
                 print "%d - %s"%( AVAILABLE_SERVICES.index(service)+1, service )
             print "+---+------+------+------+-----+"
             my_selection = raw_input("select your favourite service: ")
-            MyPager.config(SERVICE = AVAILABLE_SERVICES[ int(my_selection)-1 ]);print "done!!"
+            MyPager.config(SERVICE = AVAILABLE_SERVICES[ int(my_selection)-1 ])
+            print "Service changed!. Please login to current service."
+            MyPager.login()
         elif option == 't':
             print """
 +---+------+------+------+-----+

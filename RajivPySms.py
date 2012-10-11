@@ -49,14 +49,8 @@ class RajivSmsModule:
             )
         )
         self.Login_status = Soup_check(htmldata.read())
-        response = self.browser.response().info()
-        #self.Login_status = 'pragma' not in response
+        print_browser_response(self.browser)
         self.USER = self.Login_status and UNAME or 'No Logged in user'
-        print "+++++++++++++ browser response ++++++++++++"
-        #print "+|","Login Successful" if self.Login_status else "Login Failed, check your mobile number & password."
-        #print "+|",self.browser.geturl().split('/')[-1].split('action;')[-1].replace('?','\n+| ').replace('=',' : ')
-        print self.browser.geturl().split('/')[-1]
-        print "+++++++++++++++++++++++++++++++++++++++++++"
         return self.Login_status
         
     
@@ -110,8 +104,9 @@ class RajivSmsModule:
                             MSG_list.append( MESSAGE[:allowed_chars].replace(' ','+') )
                     try:
                         part,total = 1,len(MSG_list)
+                        htmldata = ''
                         for MSG in MSG_list:
-                            self.browser.open(  generate_url( 
+                            htmldata = self.browser.open(  generate_url( 
                                     SERVICE  = self.SERVICE, 
                                     TYPE     = 'send', 
                                     RECEIVER = RECEIVER,
@@ -122,6 +117,7 @@ class RajivSmsModule:
                                 print '\tpart',part,'of',total,'sent'
                                 part += 1
                             sleep(1)
+                        Soup_check(htmldata.read())
                         status = print_browser_response(self.browser)
                         return status
                     except:
@@ -138,13 +134,13 @@ class RajivSmsModule:
             return False
 
 def print_browser_response(browser):
-    print "++++++++++++++++++++ browser response +++++++++++++++++++"
+    print "+++++++++++++++ Browser Response +++++++++++++++++"
     response = browser.response().info()
     status   = False if 'pragma' in response else True
     #print "+|",["response: Failure","response: Success"][status]
     #print "+|",browser.geturl().split('/')[-1].split('.action?')[-1]#.split('&')[0].split('=')[-1].replace('+',' ').replace('%3A',':')
-    print browser.geturl().split('/')[-1]
-    print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    print "+|",browser.geturl().split('/')[-1]
+    print "++++++++++++++++++++++++++++++++++++++++++++++++++"
     return status
 
 def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
@@ -168,9 +164,22 @@ def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):
 
 def Soup_check(html):
     soup = BeautifulSoup(html)
+    
+    confirmation160 = soup.find('div', attrs={"class":"h-sta"})
+    if confirmation160: 
+        print "+++++++++++++++ Service Response +++++++++++++++++"
+        print "+|",confirmation160.find('h2').findAll(text=True)[0].strip().replace('\r','')
+        print "++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+    w2s_Confirmation = soup.find('div', attrs={"class":"confirm"})
+    if w2s_Confirmation:
+        print "+++++++++++++++ Service Response +++++++++++++++++"
+        print w2s_Confirmation.find('h2').findAll(text=True)[0]
+        print "++++++++++++++++++++++++++++++++++++++++++++++++++"
+
     w2sms_mobile_no = soup.find('div', attrs={"class" : "mobile-in"})
     if w2sms_mobile_no:
-        print "++++++++++++++++++++ Way2Sms Login Detail +++++++++++++++++++"
+        print "+++++++++++++ Way2Sms Login Detail +++++++++++++++"
         name = soup.find('span', attrs={"onmouseover":"dismouout();"})
         print "+| Name:",name.findAll(text=True)[0]
         
@@ -203,7 +212,7 @@ def Soup_check(html):
 
     acc_details = soup.find('div',attrs={"class" : "mad"} )
     if acc_details:
-        print "++++++++++++++++++++ 160by2 Login Detail +++++++++++++++++++"
+        print "++++++++++++++ 160by2 Login Detail +++++++++++++++"
         Text_list = acc_details.findAll(text=True)
         rem = [u'Change Password', u'(Change)', u'\n' ]
         cut = ['&nbsp;',]
@@ -216,7 +225,7 @@ def Soup_check(html):
                     text = text.replace(s,'')
                 Text_list[i] = text
                     
-        print "\n+|",Text_list[0]
+        print "$|",Text_list[0]
         for i in range(1,len(Text_list),3): print "+| %s%s %s"%(Text_list[i], Text_list[i+1] if i+1 < len(Text_list) else '' , Text_list[i+2] if i+2 < len(Text_list) else '' )
 
         last_login = soup.find('div',attrs={"class" : "lh"} )
@@ -230,7 +239,7 @@ def Soup_check(html):
                 for s in cut: 
                     text = text.replace(s,'')
                 Text_list[i] = text
-        print "\n+|",Text_list[0]
+        print "$|",Text_list[0]
         for i in range(1,len(Text_list),3): print "+| %s%s %s"%(Text_list[i], Text_list[i+1] if i+1 < len(Text_list) else '' , Text_list[i+2] if i+2 < len(Text_list) else '' )
         return True
         

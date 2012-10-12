@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from time import sleep
-from textwrap import fill
+from textwrap import fill,wrap
 import getpass
 from BeautifulSoup import BeautifulSoup
 
@@ -55,12 +55,12 @@ class RajivSmsModule:
         
     
     def config(self, SIGNATURE=None, SPLIT_OR_TRUNCATE=None, SERVICE=None):
-        if SIGNATURE != None:          self.SIGNATURE = SIGNATURE.replace(' ','+')
+        if SIGNATURE != None:          self.SIGNATURE = SIGNATURE.strip()
         if SPLIT_OR_TRUNCATE != None:  self.SPLIT_OR_TRUNCATE = SPLIT_OR_TRUNCATE
         if SERVICE != None:
             if SERVICE in SERVICE_DATA: self.SERVICE = SERVICE
 
-        data = { 'SIGNATURE'         : self.SIGNATURE.replace('+',' '),
+        data = { 'SIGNATURE'         : self.SIGNATURE,
                  'SPLIT_OR_TRUNCATE' : self.SPLIT_OR_TRUNCATE,
                  'Login_status'      : self.Login_status,
                  'USER'              : self.USER,
@@ -73,11 +73,12 @@ class RajivSmsModule:
 
     def check_message_size(self, MESSAGE):
         allowed_chars = SERVICE_DATA[ self.SERVICE ][ 'allowed_chars' ]
-        MESSAGE = MESSAGE.replace('&','and').strip()
-        if self.SIGNATURE: MESSAGE += '%0a' + self.SIGNATURE.replace('+',' ')
-        #parts = 1 if len(MESSAGE)<allowed_chars else ( (len(MESSAGE)/(allowed_chars-16)) + (1 if len(MESSAGE)%(allowed_chars-16) else 0) )
-        parts = len ( fill(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True).split('\n') )
-        return len(MESSAGE),parts,MESSAGE
+        MESSAGE = MESSAGE.strip()
+        if self.SIGNATURE: MESSAGE += '\n' + self.SIGNATURE
+        length = len(MESSAGE.replace('%0a','\n'))
+        parts = 1
+        if length > allowed_chars: parts = len ( wrap(MESSAGE.replace('%0a','\n'), width=(allowed_chars-16), fix_sentence_endings=True) )
+        return length,parts,MESSAGE
 
     def send(self,RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False):
         RECEIVER, MESSAGE = RECEIVER.strip(), MESSAGE.strip()
@@ -92,18 +93,19 @@ class RajivSmsModule:
                             return False
                     print "sending msg to %s..."%(RECEIVER)
                     MESSAGE = final_msg
+                    print final_msg
                     MSG_list = []
                     if parts == 1:
-                        MSG_list.append( MESSAGE.replace(' ','+') )
+                        MSG_list.append( MESSAGE )
                     else:
                         if self.SPLIT_OR_TRUNCATE:
-                            MESSAGE = fill(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True).split('\n')
+                            MESSAGE = wrap(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True)
                             #multipart sms append text like --> ' [part 01 of 03]' with every part of sms
-                            MSG_list = [ (MESSAGE[i].replace(' ','+')+' [part %0.2d of %0.2d]'%(i+1,len(MESSAGE))).replace(' ','+') for i in range(len(MESSAGE)) ]
+                            MSG_list = [ (MESSAGE[i] + '\n[part %0.2d of %0.2d]'%(i+1,len(MESSAGE))) for i in range(len(MESSAGE)) ]
                         else:
-                            MSG_list.append( MESSAGE[:allowed_chars].replace(' ','+') )
+                            MSG_list.append( MESSAGE[:allowed_chars] )
                     try:
-                        part,total = 1,len(MSG_list)
+                        part = 1
                         htmldata = ''
                         for MSG in MSG_list:
                             htmldata = self.browser.open(  generate_url( 
@@ -113,12 +115,12 @@ class RajivSmsModule:
                                     MSG      = MSG
                                 )
                             )
-                            if total>1:
-                                print '\tpart',part,'of',total,'sent'
+                            if parts > 1:
+                                print '\tpart',part,'of',parts,'sent'
                                 part += 1
                             sleep(1)
-                        Soup_check(htmldata.read())
                         status = print_browser_response(self.browser)
+                        Soup_check(htmldata.read())
                         return status
                     except:
                         print "!Unable to send your message :P"
@@ -147,6 +149,18 @@ def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
     HIDDEN   = "instantsms"
     CATEGORY = "Friendship+Day"
     ACTION   = "sa65sdf656fdfd"
+    UNAME, PWD, RECEIVER, MSG = UNAME.replace(' ','').strip(), PWD.replace(' ','').strip(), RECEIVER.replace(' ','').strip(), MSG.strip()
+    replace_chars = [
+        ('\n','%0a'),        ('"', '%22'),        ('<', '%3c'),        ('>', '%3e'),
+        ('{', '%7b'),        ('}', '%7d'),        ('|', '%7c'),        ('\\', '%5c'),
+        ('^', '%5e'),        ('~', '%7e'),        ('[', '%5b'),        (']', '%5d'),
+        ('`', '%60'),        ('$', '%24'),        ('&', '%26'),        ('+', '%2b'),
+        (',', '%2c'),        ('/', '%2f'),        (':', '%3a'),        (';', '%3b'),
+        ('=', '%3d'),        ('?', '%3f'),        ('@', '%40'),        (' ', '%20'),
+        ('#', '%23'),
+    ]
+    for From,To in replace_chars:
+        MSG = MSG.replace(From, To)
     URL      = eval(SERVICE_DATA[ SERVICE ][ TYPE ])
     return URL
 
@@ -155,6 +169,7 @@ def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):
     print final_msg.replace('%0a','\n')
     print "**********************************"
     allow = 'n'
+    print "message length: %d, "%(length),
     if parts > 1:
         allow = raw_input("your message will be splitted into %2d parts, do you want to proceed(y/n): "%(parts) if SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars, do you want to proceed sending(y/n): "%(length))
     else:
@@ -174,7 +189,7 @@ def Soup_check(html):
     w2s_Confirmation = soup.find('div', attrs={"class":"confirm"})
     if w2s_Confirmation:
         print "+++++++++++++++ Service Response +++++++++++++++++"
-        print w2s_Confirmation.find('h2').findAll(text=True)[0]
+        print "+|",w2s_Confirmation.find('h2').findAll(text=True)[0]
         print "++++++++++++++++++++++++++++++++++++++++++++++++++"
 
     w2sms_mobile_no = soup.find('div', attrs={"class" : "mobile-in"})

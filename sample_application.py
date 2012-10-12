@@ -1,6 +1,18 @@
 #!/usr/bin/python
 from RajivPySms import RajivSmsModule,get_conformation
 import RajivPearlsAddon
+
+def multiline_input(query=None):
+    print "Note: Empty line will conclude getting input from user. Now start typing..."
+    if query: print query
+    buffer = ''
+    while True:
+        line = raw_input()
+        if not line: break
+        if buffer: buffer += '\n'
+        buffer += line
+    return buffer
+        
 def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     'instant sms to a receiver'
     if not MyPager.config()['Login_status']: 
@@ -11,7 +23,7 @@ def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     if RECEIVER and MESSAGE: MyPager.send(RECEIVER,MESSAGE)
     else:
         RECEIVER    = raw_input("Receiver no: ")
-        MESSAGE     = raw_input("Your msg: ")
+        MESSAGE     = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
 
 def start_one_to_one_chat(MyPager, RECEIVER=False):
@@ -24,7 +36,7 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
     if not RECEIVER: RECEIVER = raw_input("Receiver no: ")
     begun = 'y'
     while begun == 'y':
-        MESSAGE = raw_input("Your msg: ")
+        MESSAGE = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
         begun = raw_input("Want send another sms(y/n): ")
 
@@ -55,7 +67,7 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
 
     elif CONTACT_CSV_FILE: RECEIVERS = [ contact.split(',')[1] for contact in open(CONTACT_CSV_FILE,'r') ]
 
-    if not MESSAGE: MESSAGE = raw_input("Your msg: ")
+    if not MESSAGE: MESSAGE = multiline_input("Your msg: ")
     
     length,parts,final_msg = MyPager.check_message_size(MESSAGE)
     if get_conformation(length, parts, final_msg,SPLIT_OR_TRUNCATE = MyPager.config()['SPLIT_OR_TRUNCATE'] ) == 'n':

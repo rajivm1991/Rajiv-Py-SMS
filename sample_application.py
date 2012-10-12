@@ -68,17 +68,17 @@ def rajivpearl_sms(MyPager):
     print """
 +---+------+------+------+------+------+
 |            Pearl SMS options         |
-| f - Current Forex Rates(USD-INR)     |
-| b - back to main menu                |
+| f - Current Forex Rates (XE rates)   |
+| w - Word search (Google Dict)        |
+| b - back                             |
 +---+------+------+------+------+------+
 """
     myoption = raw_input("Select your option: ")
-    if myoption == 'f':
-        print 'Requesting forex rates...'
-        MESSAGE = RajivPearlsAddon.get_forex_rate()
-        RECEIVER = raw_input('Enter receiver number: ')
-        MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
-        
+    MESSAGE = ''
+    if   myoption == 'f':   MESSAGE = RajivPearlsAddon.get_forex_rate(From = 'USD', To = 'INR')
+    elif myoption == 'w':   MESSAGE = RajivPearlsAddon.find_in_gdict(Word = raw_input("Word to search: "))
+    RECEIVER = raw_input('Enter receiver number: ')
+    MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
 
 def main():
     #======================= You can Run this program as a Stand Alone App ===========================
@@ -132,6 +132,7 @@ def main():
 | If sms > allowed characters: |
 | s - split and send           |
 | t - truncate and send        |
+| b - back                     |
 +---+------+------+------+-----+"""
             my_sending_method = raw_input("select your sending method: ")
             if   my_sending_method == 's': MyPager.config( SPLIT_OR_TRUNCATE = True )

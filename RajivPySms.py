@@ -77,7 +77,8 @@ class RajivSmsModule:
         if self.SIGNATURE: MESSAGE += '\n' + self.SIGNATURE
         length = len(MESSAGE.replace('%0a','\n'))
         parts = 1
-        if length > allowed_chars: parts = len ( wrap(MESSAGE.replace('%0a','\n'), width=(allowed_chars-16), fix_sentence_endings=True) )
+        if length > allowed_chars: 
+            parts = len ( wrap(MESSAGE.replace('%0a','\n'), width=(allowed_chars-16), fix_sentence_endings=True) )
         return length,parts,MESSAGE
 
     def send(self,RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False):
@@ -98,7 +99,7 @@ class RajivSmsModule:
                         MSG_list.append( MESSAGE )
                     else:
                         if self.SPLIT_OR_TRUNCATE:
-                            MESSAGE = wrap(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True)
+                            MESSAGE = wrap(MESSAGE, width=(allowed_chars-16), fix_sentence_endings=True,  replace_whitespace=False)
                             #multipart sms append text like --> ' [part 01 of 03]' with every part of sms
                             MSG_list = [ (MESSAGE[i] + '\n[part %0.2d of %0.2d]'%(i+1,len(MESSAGE))) for i in range(len(MESSAGE)) ]
                         else:

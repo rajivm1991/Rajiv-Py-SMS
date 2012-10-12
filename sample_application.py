@@ -82,6 +82,7 @@ def rajivpearl_sms(MyPager):
 |            Pearl SMS options         |
 | f - Current Forex Rates (XE rates)   |
 | w - Word search (Google Dict)        |
+| g - Gold Rate Today (India - Rs/1gm) |
 | b - back                             |
 +---+------+------+------+------+------+
 """
@@ -89,6 +90,7 @@ def rajivpearl_sms(MyPager):
     MESSAGE = ''
     if   myoption == 'f':   MESSAGE = RajivPearlsAddon.get_forex_rate(From = 'USD', To = 'INR')
     elif myoption == 'w':   MESSAGE = RajivPearlsAddon.find_in_gdict(Word = raw_input("Word to search: "))
+    elif myoption == 'g':   MESSAGE = RajivPearlsAddon.gold_rate_india()
     RECEIVER = raw_input('Enter receiver number: ')
     MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
 

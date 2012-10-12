@@ -2,6 +2,7 @@ from datetime import datetime
 from RajivPySms import BOT_BROWSER
 from mechanize import Browser
 from textwrap import fill,wrap
+from BeautifulSoup import BeautifulSoup
 
 browser = Browser()
 browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
@@ -48,4 +49,18 @@ def find_in_gdict(Word = 'Error'):
         return unicode(msg.strip().replace("\n","%0a"),errors='ignore')
     else: 
         return False
+
+def gold_rate_india():
+    data = browser.open("http://www.sify.com/finance/gold_rates/").read()
+    soup = BeautifulSoup(data)
+    gold = soup.find('div', attrs={"class":"rates-outer-wrapper"})
+    g_list = []
+    msg = 'Gold(1g) '+datetime.strftime(datetime.now(),"%d/%m/%Y")+'\n     22-Car  24-Car\n'
+    for tag in gold.findAll('td', attrs={"align":"center"}):
+        t = tag.findAll(text=True)
+        rem = [u'Company', u'Jet Airways', u'India Cements', u'Cipla', u'Century Textiles', u' ', u'\n']
+        if t and not [ item for item in rem if item in t ]: g_list.append(t[0])
+    city_code = ["Chn","Mum","Del","Kol"]
+    for i in range(4,16,3): msg += '%s|%.2f|%.2f'%(city_code[((i-1)/3)-1],float(g_list[i].replace('Rs. ',''))/10,float(g_list[i+1].replace('Rs. ',''))/10) + '\n'
+    return msg.strip()
 

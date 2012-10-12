@@ -93,7 +93,6 @@ class RajivSmsModule:
                             return False
                     print "sending msg to %s..."%(RECEIVER)
                     MESSAGE = final_msg
-                    print final_msg
                     MSG_list = []
                     if parts == 1:
                         MSG_list.append( MESSAGE )

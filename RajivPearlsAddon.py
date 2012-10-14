@@ -34,12 +34,14 @@ def find_in_gdict(Word = 'Error'):
             for entry in primary.get('entries'):
                 for term in entry.get('terms'):
                     if not term.get('labels',[{}])[0].get('text') and get_eg:
-                        msg += term.get('text','').replace('<em>','').replace('</em>','') + '\n'
+                        msg += term.get('text','')+ '\n'
+                        for cut in ['<em>', '</em>', '<i>', '</i>', '<b>', '</b>']: msg = msg.replace(cut,'')
                         get_eg = False
                     for eentry in entry.get('entries',[]):
                         for eterm in eentry.get('terms'):
                             if get_eg:
-                                msg += '-'+eterm.get('text','').replace('<em>','').replace('</em>','').replace('<b>','').replace('</b>','')+'\n'
+				msg += '-'+eterm.get('text','')+'\n'
+				for cut in ['<em>', '</em>', '<i>', '</i>', '<b>', '</b>']: msg = msg.replace(cut,'')
                                 get_eg = False
         empty = len(msg.strip()) == 0
         for entry in result.get('webDefinitions',[{}])[0].get('entries',[]):

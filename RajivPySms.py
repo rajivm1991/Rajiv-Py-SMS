@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from time import sleep
-from textwrap import fill,wrap
+from textwrap import wrap
 import getpass
 from BeautifulSoup import BeautifulSoup
 

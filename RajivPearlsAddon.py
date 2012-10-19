@@ -1,7 +1,6 @@
 from datetime import datetime
 from RajivPySms import BOT_BROWSER
 from mechanize import Browser
-from textwrap import fill,wrap
 from BeautifulSoup import BeautifulSoup
 
 browser = Browser()
@@ -9,15 +8,14 @@ browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
 date = datetime.strftime(datetime.now(),"%B %d, %I:%M %p")
 
 def get_forex_rate(From = 'USD', To = 'INR'):
-    msg = "Forex Rate Live:%0a"+date+"%0a- - - - - - - - - -%0a"
+    msg = "Forex Rate Live:%0a"+date+"%0a"
     data = browser.open("http://www.xe.com/ucc/convert.cgi?template=mobile&Amount=1&From="+From+"&To="+To).read()
     n = data.index('1 '+From+' =')
     m = data[n:].index(' '+To)
     msg += "" + data[n:n+m+4] + '%0a'
     n = data.index('1 '+To+' =')
     m = data[n:].index(' '+From)
-    msg += data[n:n+m+4]
-    msg += "%0a- - - - - - - - - -"
+    msg += "" + data[n:n+m+4]
     return msg
 
 def find_in_gdict(Word = 'Error'):
@@ -40,8 +38,8 @@ def find_in_gdict(Word = 'Error'):
                     for eentry in entry.get('entries',[]):
                         for eterm in eentry.get('terms'):
                             if get_eg:
-				msg += '-'+eterm.get('text','')+'\n'
-				for cut in ['<em>', '</em>', '<i>', '</i>', '<b>', '</b>']: msg = msg.replace(cut,'')
+                                msg += '-'+eterm.get('text','')+'\n'
+                                for cut in ['<em>', '</em>', '<i>', '</i>', '<b>', '</b>']: msg = msg.replace(cut,'')
                                 get_eg = False
         empty = len(msg.strip()) == 0
         for entry in result.get('webDefinitions',[{}])[0].get('entries',[]):

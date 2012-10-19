@@ -5,13 +5,13 @@ import RajivPearlsAddon
 def multiline_input(query=None):
     print "Note: Empty line will conclude getting input from user. Now start typing..."
     if query: print query
-    buffer = ''
+    Buffer = ''
     while True:
         line = raw_input()
         if not line: break
-        if buffer: buffer += '\n'
-        buffer += line
-    return buffer
+        if Buffer: Buffer += '\n'
+        Buffer += line
+    return Buffer
         
 def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     'instant sms to a receiver'

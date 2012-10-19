@@ -8,11 +8,11 @@ browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
 date = datetime.strftime(datetime.now(),"%B %d, %I:%M %p")
 
 def get_forex_rate(From = 'USD', To = 'INR'):
-    msg = "Forex Rate Live:%0a"+date+"%0a"
+    msg = "Dollar Rate: "+date+"; "
     data = browser.open("http://www.xe.com/ucc/convert.cgi?template=mobile&Amount=1&From="+From+"&To="+To).read()
     n = data.index('1 '+From+' =')
     m = data[n:].index(' '+To)
-    msg += "" + data[n:n+m+4] + '%0a'
+    msg += "" + data[n:n+m+4] + '; '
     n = data.index('1 '+To+' =')
     m = data[n:].index(' '+From)
     msg += "" + data[n:n+m+4]
@@ -46,7 +46,7 @@ def find_in_gdict(Word = 'Error'):
             if empty:
                 msg = entry.get('terms',[{}])[0].get('text').replace('&quot;','"').replace('&#39;',"'")
                 empty = False
-        return unicode(msg.strip().replace("\n","%0a"),errors='ignore')
+        return unicode(msg.strip(),errors='ignore')
     else: 
         return False
 

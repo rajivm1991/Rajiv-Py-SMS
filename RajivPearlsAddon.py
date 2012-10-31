@@ -2,9 +2,10 @@ from datetime import datetime
 from RajivPySms import BOT_BROWSER
 from mechanize import Browser
 from BeautifulSoup import BeautifulSoup
+import bitly
 
 browser = Browser()
-browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
+browser.addheaders = [('User-agent', BOT_BROWSER['chrome'] )]
 date = datetime.strftime(datetime.now(),"%B %d, %I:%M %p")
 
 def get_forex_rate(From = 'USD', To = 'INR'):
@@ -72,4 +73,27 @@ def bk_thought_for_today():
         while rem in thought: thought.remove(rem)
     return 'Om Shanti:\n'+''.join(thought)+"\n~ Brahmakumaris"
 
+def random_blog():
+    data = browser.open("http://gulzarmanzil.wordpress.com/?random").read()
+    soup = BeautifulSoup(data)
+    title = soup.find('title').findAll(text=True)[0].split('|')[0].strip()
+    link = browser.geturl()
+    rep_with = {
+        "&lsquo;" : "'",
+        "&rsquo;" : "'",
+        "&#8217;" : "'",
+        "&#8211;" : "-",
+        "&#8230;" : "...",
+        "&hellip;": "...",
+    }
+    for rem in rep_with.keys():
+        while rem in title:
+            title.replace(rem,rep_with[rem])
+    if len(title+' '+link) > 130:
+        try:
+            # Fill your BITLY api credentials here
+            bittifier = bitly.Api(login ='YOUR LOGIN', apikey='YOUR API KEY')
+            link = str(bittifier.shorten(link))
+        except:pass
+    return title + ' ' + link
 

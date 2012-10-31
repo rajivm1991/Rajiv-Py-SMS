@@ -55,12 +55,21 @@ def gold_rate_india():
     soup = BeautifulSoup(data)
     gold = soup.find('div', attrs={"class":"rates-outer-wrapper"})
     g_list = []
-    msg = 'Gold(1g) '+datetime.strftime(datetime.now(),"%d/%m/%Y")+'\n     22-Car  24-Car\n'
+    msg = 'Gold ('+datetime.strftime(datetime.now(),"%b %d")+') 22C 24C\n'
     for tag in gold.findAll('td', attrs={"align":"center"}):
         t = tag.findAll(text=True)
         rem = [u'Company', u'Jet Airways', u'India Cements', u'Cipla', u'Century Textiles', u' ', u'\n']
         if t and not [ item for item in rem if item in t ]: g_list.append(t[0])
     city_code = ["Chn","Mum","Del","Kol"]
-    for i in range(4,16,3): msg += '%s|%.2f|%.2f'%(city_code[((i-1)/3)-1],float(g_list[i].replace('Rs. ',''))/10,float(g_list[i+1].replace('Rs. ',''))/10) + '\n'
+    for i in range(4,16,3): msg += '%s\n%.2f, %.2f'%(city_code[((i-1)/3)-1],float(g_list[i].replace('Rs. ',''))/10,float(g_list[i+1].replace('Rs. ',''))/10) + '\n'
     return msg.strip()
+
+def bk_thought_for_today():
+    data = browser.open("http://www.bkwsu.org/us/newyork/thoughts").read()
+    soup = BeautifulSoup(data)
+    thought = soup.find('div', attrs={"id":"thoughtForToday"}).findAll(text=True)
+    for rem in [u'\n',u'&nbsp;']: 
+        while rem in thought: thought.remove(rem)
+    return 'Om Shanti:\n'+''.join(thought)+"\n~ Brahmakumaris"
+
 

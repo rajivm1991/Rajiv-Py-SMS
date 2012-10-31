@@ -84,6 +84,7 @@ def rajivpearl_sms(MyPager):
 | w - Word search (Google Dict)        |
 | g - Gold Rate Today (India - Rs/1gm) |
 | o - Thought For Today (BKWSU-Newyork)|
+| r - Random blog from GulzarManzil    |
 | b - back                             |
 +---+------+------+------+------+------+
 """
@@ -93,6 +94,7 @@ def rajivpearl_sms(MyPager):
     elif myoption == 'w':   MESSAGE = RajivPearlsAddon.find_in_gdict(Word = raw_input("Word to search: "))
     elif myoption == 'g':   MESSAGE = RajivPearlsAddon.gold_rate_india()
     elif myoption == 'o':   MESSAGE = RajivPearlsAddon.bk_thought_for_today()
+    elif myoption == 'r':   MESSAGE = RajivPearlsAddon.random_blog()
     RECEIVER = raw_input('Enter receiver number: ')
     MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
 

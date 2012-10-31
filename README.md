@@ -70,8 +70,18 @@ Features of Rajiv-Pearls-Addon:
     *   USD - United States Dollars
     *   ZAR - South Africa Rand
 
-- Market Rates (comming soon)
-- Sensex (comming soon)
+- Google Dictionary
+
+    To get the dict meaning of words online, using Google's Dictionary API.
+
+- Thoughts for Today
+
+    To start our day with positive vibrations, get the Brahmakumaris Thoughts for today from BKWSU.org Newyork.
+
+- Gold Rates in India
+
+    To get the Daily variations in Gold rates in INR. 
+    Includes Rates for 22-Caret and 24-Carets at Chennai, Mumbai, Delhi, Kolkata.
 
 
 Note:

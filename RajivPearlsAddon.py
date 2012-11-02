@@ -8,6 +8,10 @@ browser = Browser()
 browser.addheaders = [('User-agent', BOT_BROWSER['chrome'] )]
 date = datetime.strftime(datetime.now(),"%B %d, %I:%M %p")
 
+bitly_login = 'your bitly login'
+bitly_key   = 'your bitly key'
+weather_key = "your weather api key"
+
 def get_forex_rate(From = 'USD', To = 'INR'):
     msg = "Dollar Rate: "+date+"; "
     data = browser.open("http://www.xe.com/ucc/convert.cgi?template=mobile&Amount=1&From="+From+"&To="+To).read()
@@ -92,8 +96,24 @@ def random_blog():
     if len(title+' '+link) > 130:
         try:
             # Fill your BITLY api credentials here
-            bittifier = bitly.Api(login ='YOUR LOGIN', apikey='YOUR API KEY')
+            bittifier = bitly.Api(login=bitly_login, apikey=bitly_key)
             link = str(bittifier.shorten(link))
         except:pass
     return title + ' ' + link
 
+def get_weather(city = 'Bangalore,India'): # "rajapalayam,India"
+    data = browser.open("http://free.worldweatheronline.com/feed/weather.ashx?q=" + city + "&format=json&num_of_days=5&key=" + weather_key).read()
+    x = eval('('+data+')')
+    cc = x['data']['current_condition'][0]
+    wc = cc['weatherCode']
+    for line in browser.open("http://www.worldweatheronline.com/feed/wwoConditionCodes.txt").read().split('\n'):
+        if line[:3] == wc:
+            wc = line.split('\t')[1]
+            break
+    weather = "Weather Today:\n"+x['data']['request'][0]['query']+' '+cc['observation_time']+'\n'
+    weather += wc+'\n'
+    weather += "Temp: "+cc['temp_C']+'C, '+cc['temp_F']+'F\n'
+    weather += "Wind: "+cc['windspeedKmph']+'Kmph > '+cc['winddir16Point']+'\n'
+    weather += "Humidity: "+cc['humidity']+"\n"
+    weather += 'Visibility: '+cc['visibility']+'km'
+    return weather

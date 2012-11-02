@@ -81,13 +81,16 @@ Features of Rajiv-Pearls-Addon:
 - **Gold Rates in India**
 
     To get the Daily variations in Gold rates in INR. 
+    
     Includes Rates for 22-Caret and 24-Carets at Chennai, Mumbai, Delhi, Kolkata.
 
 - **Random Post from your Wordpress blog**
 
     Will choose a random post from your Wordpress.com blog. (configured default with http://gulzarmanzil.wordpress.com - My Personal Blog)
+    
     Retrives Title and URL of the post.
-    The highlight in this is if Title + URL exeeds 130 charecters, the URL will automatically shortened using Optional Bitly library.
+    
+    The highlight is if Title + URL exeeds 130 charecters, the URL will automatically shortened using Optional Bitly library.
     
 
 Note:
@@ -97,6 +100,6 @@ Note:
 - for more information refer the wiki page of the project( still not done! Need help to document.. )
 - your Mobile-No will be prepended with your message text
 - your Signature will be appended with your message text
-- to use the optional bitly library for url shortening in fill your bitly API credentials in **RajivPearlsAddon.py**
+- to use the optional bitly library for url shortening, fill your bitly API credentials in **RajivPearlsAddon.py**
 
 - - -

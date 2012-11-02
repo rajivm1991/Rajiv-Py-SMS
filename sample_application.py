@@ -81,7 +81,8 @@ def rajivpearl_sms(MyPager):
 +---+------+------+------+------+------+
 |            Pearl SMS options         |
 | f - Current Forex Rates (XE rates)   |
-| w - Word search (Google Dict)        |
+| w - Weather Forcast (Bangalore)      |
+| d - Dict Word search (Google Dict)   |
 | g - Gold Rate Today (India - Rs/1gm) |
 | o - Thought For Today (BKWSU-Newyork)|
 | r - Random blog from GulzarManzil    |
@@ -91,7 +92,8 @@ def rajivpearl_sms(MyPager):
     myoption = raw_input("Select your option: ")
     MESSAGE = ''
     if   myoption == 'f':   MESSAGE = RajivPearlsAddon.get_forex_rate(From = 'USD', To = 'INR')
-    elif myoption == 'w':   MESSAGE = RajivPearlsAddon.find_in_gdict(Word = raw_input("Word to search: "))
+    elif myoption == 'w':   MESSAGE = RajivPearlsAddon.get_weather()
+    elif myoption == 'd':   MESSAGE = RajivPearlsAddon.find_in_gdict(Word = raw_input("Word to search: "))
     elif myoption == 'g':   MESSAGE = RajivPearlsAddon.gold_rate_india()
     elif myoption == 'o':   MESSAGE = RajivPearlsAddon.bk_thought_for_today()
     elif myoption == 'r':   MESSAGE = RajivPearlsAddon.random_blog()

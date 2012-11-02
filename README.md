@@ -78,6 +78,10 @@ Features of Rajiv-Pearls-Addon:
 
     To start our day with positive vibrations, get the Brahmakumaris Thoughts for today from BKWSU.org Newyork.
 
+- **Weather Forcast**
+
+    Feel safety before going out of home by getting the latest updates of Weather forcast of your city from worldweatheronline.com
+
 - **Gold Rates in India**
 
     To get the Daily variations in Gold rates in INR. 

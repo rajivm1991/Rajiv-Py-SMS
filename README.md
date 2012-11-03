@@ -96,14 +96,20 @@ Features of Rajiv-Pearls-Addon:
     
     The highlight is if Title + URL exeeds 130 charecters, the URL will automatically shortened using Optional Bitly library.
 
-RajivPySms-Cron-Job(coming soon)
-================================
+RajivPySms-Cron-Job (Schedule your FREE notification sms)
+=========================================================
 
 This is automatic SMS notification sender. All you need to do is edit your cron-job file and point it to RajivPySms_cronjob.py script. 
 
 You can configure the RECEIVERS, TIMINGS and Type of Message to send..
 
 Automatic Twitter postings also available. It can be configured with TIMINGS and Type of Message to tweet..
+
+Configuration Details:
+----------------------
+
+- Config your contacts and Allowed type of sms for that contact in **RajivPySms_contacts.csv**
+- Config your Scheduled sms timings for each type of sms in **RajivPySms_timings.json**
 
 Note:
 -----

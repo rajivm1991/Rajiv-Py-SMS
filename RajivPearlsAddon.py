@@ -1,5 +1,5 @@
 from datetime import datetime
-from RajivPySms import BOT_BROWSER
+from RajivPySms import BOT_BROWSER, CREDENTIALS
 from mechanize import Browser
 from BeautifulSoup import BeautifulSoup
 import bitly
@@ -7,10 +7,6 @@ import bitly
 browser = Browser()
 browser.addheaders = [('User-agent', BOT_BROWSER['chrome'] )]
 date = datetime.strftime(datetime.now(),"%B %d, %I:%M %p")
-
-bitly_login = 'your bitly login'
-bitly_key   = 'your bitly key'
-weather_key = "your weather api key"
 
 def get_forex_rate(From = 'USD', To = 'INR'):
     msg = "Dollar Rate: "+date+"; "
@@ -96,13 +92,13 @@ def random_blog():
     if len(title+' '+link) > 130:
         try:
             # Fill your BITLY api credentials here
-            bittifier = bitly.Api(login=bitly_login, apikey=bitly_key)
+            bittifier = bitly.Api(login=CREDENTIALS['bitly']['login'], apikey=CREDENTIALS['bitly']['key'])
             link = str(bittifier.shorten(link))
         except:pass
     return title + ' ' + link
 
 def get_weather(city = 'Bangalore,India'): # "rajapalayam,India"
-    data = browser.open("http://free.worldweatheronline.com/feed/weather.ashx?q=" + city + "&format=json&num_of_days=5&key=" + weather_key).read()
+    data = browser.open("http://free.worldweatheronline.com/feed/weather.ashx?q=" + city + "&format=json&num_of_days=5&key=" + CREDENTIALS['wwo']['key']).read()
     x = eval('('+data+')')
     cc = x['data']['current_condition'][0]
     wc = cc['weatherCode']

@@ -95,15 +95,23 @@ Features of Rajiv-Pearls-Addon:
     Retrives Title and URL of the post.
     
     The highlight is if Title + URL exeeds 130 charecters, the URL will automatically shortened using Optional Bitly library.
-    
+
+RajivPySms-Cron-Job(coming soon)
+================================
+
+This is automatic SMS notification sender. All you need to do is edit your cron-job file and point it to RajivPySms_cronjob.py script. 
+
+You can configure the RECEIVERS, TIMINGS and Type of Message to send..
+
+Automatic Twitter postings also available. It can be configured with TIMINGS and Type of Message to tweet..
 
 Note:
 -----
 
+- for fast user experience fill all your accounts and API credentials in **RajivPySms_credentials.json**
 - refer **sample_application.py** for more options and usages. sample_application.py is a stand-alone console app too :-)
 - for more information refer the wiki page of the project( still not done! Need help to document.. )
 - your Mobile-No will be prepended with your message text
 - your Signature will be appended with your message text
-- to use the optional bitly library for url shortening, fill your bitly API credentials in **RajivPearlsAddon.py**
 
 - - -

@@ -133,7 +133,7 @@ def main():
         elif option == 'i': send_instant_sms(MyPager)
         elif option == 'c': start_one_to_one_chat(MyPager)
         elif option == 'g': send_group_sms(MyPager)
-        elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE="sms_contact.csv")
+        elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE="RajivPySms_contacts.csv")
         elif option == 's': MyPager.config(SIGNATURE = raw_input("enter your new sign: "));print "done!!"
         elif option == 'd':
             AVAILABLE_SERVICES = MyPager.config()['AVAILABLE_SERVICES']

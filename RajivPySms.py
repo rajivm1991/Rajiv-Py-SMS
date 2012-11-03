@@ -79,8 +79,8 @@ class RajivSmsModule:
         print "********* your message is ********"
         print MESSAGE.replace('%0a','\n')
         print "**********************************"
-        print "message length: %d, "%(length),
-        if parts > 1: print "your message will be splitted into %2d parts, do you want to proceed(y/n): "%(parts) if self.SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars, do you want to proceed sending(y/n): "%(length)
+        print "message length: %d, "%(length)
+        if parts > 1: print "your message will be splitted into %2d parts."%(parts) if self.SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars."%(length)
 
         return length,parts,MESSAGE
 

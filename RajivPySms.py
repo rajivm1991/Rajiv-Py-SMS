@@ -4,24 +4,13 @@ from textwrap import wrap
 import getpass
 from BeautifulSoup import BeautifulSoup
 
+
 # global variables
-BOT_BROWSER = { 
-    'firefox' : 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/16.0.1-1.fc9 Firefox/13.0.1', # for Mozilla FireFox 13.0.1
-    'chrome'  : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/12.04 Chromium/18.0.1025.168 Chrome/18.0.1025.168 Safari/535.19', # for Google Chrome 18.0.1025.168
-    'safari'  : 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25', # for Apple Safari 6.0 Mobile/10A5355d
-}
-SERVICE_DATA = {
-    'way2sms' : {   
-        'login'         : "'http://site2.way2sms.com/Login1.action?username=%s&password=%s'%(UNAME,PWD)",
-        'send'          : "'http://site2.way2sms.com/quicksms.action?MobNo=%s&textArea=%s&HiddenAction=%s&Action=%s&catnamedis=%s'%(RECEIVER,MSG,HIDDEN,ACTION,CATEGORY)",
-        'allowed_chars' : 130,
-    },
-    '160by2'  : {
-        'login'         : "'http://www.160by2.com/re-login?username=%s&password=%s&button=Login'%(UNAME,PWD)",
-        'send'          : "'http://www.160by2.com/SendSMSAction?hid_exists=no&action1=%s&mobile1=%s&msg1=%s&btnsendsms=Send+Now'%(ACTION,RECEIVER,MSG)",
-        'allowed_chars' : 140,
-    },
-}
+BOT_BROWSER  = eval('('+open('RajivPySms_browserheaders.json').read()+')')
+SERVICE_DATA = eval('('+open('RajivPySms_servicedata.json'   ).read()+')')
+CREDENTIALS  = eval('('+open('RajivPySms_credentials.json'   ).read()+')')
+
+
 class RajivSmsModule:
     USER                = "No Logged in user"
     SPLIT_OR_TRUNCATE   = True  # True - split-mode ; False - truncate-mode
@@ -29,16 +18,22 @@ class RajivSmsModule:
     Login_status        = False
     SERVICE             = "way2sms"
 
+
     def __init__(self):
         from mechanize import Browser
         self.browser = Browser()
         # This is really Cheating with Bot Browser as (firefor/chrome/safari)
-        self.browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
+        self.browser.addheaders = [('User-agent', BOT_BROWSER['chrome'] )]
         self.browser.method = "POST"
+
         
     def login(self,UNAME='',PWD=''):
-        if not UNAME: UNAME = raw_input("Enter Your Mobile number: ")
-        if not PWD:   PWD   = getpass.getpass("Enter Your Password: ")
+        if not UNAME:
+            if CREDENTIALS[self.SERVICE]['login']: UNAME = CREDENTIALS[self.SERVICE]['login']
+            else: UNAME = raw_input("Enter Your Mobile number: ")
+        if not PWD: 
+            if CREDENTIALS[self.SERVICE]['pwd']: PWD = CREDENTIALS[self.SERVICE]['pwd']
+            else: PWD = getpass.getpass("Enter Your Password: ")
         UNAME, PWD = UNAME.strip(), PWD.strip()
         print "Attempting to Login..."
         htmldata = self.browser.open( generate_url( 
@@ -71,6 +66,7 @@ class RajivSmsModule:
         
         return data
 
+
     def check_message_size(self, MESSAGE):
         allowed_chars = SERVICE_DATA[ self.SERVICE ][ 'allowed_chars' ]
         MESSAGE = MESSAGE.strip()
@@ -79,7 +75,15 @@ class RajivSmsModule:
         parts = 1
         if length > allowed_chars: 
             parts = len ( wrap(MESSAGE.replace('%0a','\n'), width=(allowed_chars-16), fix_sentence_endings=True) )
+
+        print "********* your message is ********"
+        print MESSAGE.replace('%0a','\n')
+        print "**********************************"
+        print "message length: %d, "%(length),
+        if parts > 1: print "your message will be splitted into %2d parts, do you want to proceed(y/n): "%(parts) if self.SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars, do you want to proceed sending(y/n): "%(length)
+
         return length,parts,MESSAGE
+
 
     def send(self,RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False):
         RECEIVER, MESSAGE = RECEIVER.strip(), MESSAGE.strip()
@@ -89,7 +93,7 @@ class RajivSmsModule:
                 if len(RECEIVER) == 10:
                     length,parts,final_msg = self.check_message_size(MESSAGE)
                     if CONFIRM_BEFORE_SENDING:
-                        if get_conformation(length,parts,final_msg,self.SPLIT_OR_TRUNCATE) == 'n':
+                        if get_conformation() == 'n':
                             print "! sending process stopped.."
                             return False
                     print "sending msg to %s..."%(RECEIVER)
@@ -135,6 +139,7 @@ class RajivSmsModule:
             print "!Please login first :P"
             return False
 
+
 def print_browser_response(browser):
     print "+++++++++++++++ Browser Response +++++++++++++++++"
     response = browser.response().info()
@@ -144,6 +149,7 @@ def print_browser_response(browser):
     print "+|",browser.geturl().split('/')[-1]
     print "++++++++++++++++++++++++++++++++++++++++++++++++++"
     return status
+
 
 def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
     HIDDEN   = "instantsms"
@@ -164,18 +170,12 @@ def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
     URL      = eval(SERVICE_DATA[ SERVICE ][ TYPE ])
     return URL
 
-def get_conformation(length,parts,final_msg,SPLIT_OR_TRUNCATE):
-    print "********* your message is ********"
-    print final_msg.replace('%0a','\n')
-    print "**********************************"
-    allow = 'n'
-    print "message length: %d, "%(length),
-    if parts > 1:
-        allow = raw_input("your message will be splitted into %2d parts, do you want to proceed(y/n): "%(parts) if SPLIT_OR_TRUNCATE else "your message is %d long, it will be truncated to 130 chars, do you want to proceed sending(y/n): "%(length))
-    else:
-        allow = raw_input("do you want to proceed sending(y/n): ")
+
+def get_conformation():
+    allow = raw_input("do you want to proceed sending(y/n): ")
     if allow != 'y': allow = 'n'
     return allow
+
 
 def Soup_check(html):
     soup = BeautifulSoup(html)

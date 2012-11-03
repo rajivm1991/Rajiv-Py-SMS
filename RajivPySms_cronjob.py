@@ -14,7 +14,7 @@ browser.method = "POST"
 global Twitter,T_status
 Twitter,T_status = None, False
 
-# ============================================================= Control Panel ========================
+# ============================================================= Fuel Tank ========================
 
 contacts = open('RajivPySms_contacts.csv').readlines()
 titles = [ msg_title.strip() for msg_title in contacts[0].split(',')[2:] ]

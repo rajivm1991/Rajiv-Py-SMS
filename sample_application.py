@@ -69,8 +69,8 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
 
     if not MESSAGE: MESSAGE = multiline_input("Your msg: ")
     
-    length,parts,final_msg = MyPager.check_message_size(MESSAGE)
-    if get_conformation(length, parts, final_msg,SPLIT_OR_TRUNCATE = MyPager.config()['SPLIT_OR_TRUNCATE'] ) == 'n':
+    MyPager.check_message_size(MESSAGE)
+    if get_conformation() == 'n':
         print "! sending process stopped.."
         return False
 
@@ -101,7 +101,7 @@ def rajivpearl_sms(MyPager):
     MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
 
 def main():
-    #======================= You can Run this program as a Stand Alone App ===========================
+    #======================= You can Run this program as a Stand Alone Console App ===========================
     MyPager = RajivSmsModule()
     option = '0'
     while option != 'x':
@@ -144,7 +144,7 @@ def main():
             print "+---+------+------+------+-----+"
             my_selection = raw_input("select your favourite service: ")
             MyPager.config(SERVICE = AVAILABLE_SERVICES[ int(my_selection)-1 ])
-            print "Service changed!. Please login to current service."
+            print "Service changed!. Attempting Login into current service..."
             MyPager.login()
         elif option == 't':
             print """

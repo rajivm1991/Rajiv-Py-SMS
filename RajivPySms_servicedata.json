@@ -1,0 +1,13 @@
+{
+    'way2sms' : {   
+        'login'         : "'http://site2.way2sms.com/Login1.action?username=%s&password=%s'%(UNAME,PWD)",
+        'send'          : "'http://site2.way2sms.com/quicksms.action?MobNo=%s&textArea=%s&HiddenAction=%s&Action=%s&catnamedis=%s'%(RECEIVER,MSG,HIDDEN,ACTION,CATEGORY)",
+        'allowed_chars' : 130,
+    },
+    '160by2'  : {
+        'login'         : "'http://www.160by2.com/re-login?username=%s&password=%s&button=Login'%(UNAME,PWD)",
+        'send'          : "'http://www.160by2.com/SendSMSAction?hid_exists=no&action1=%s&mobile1=%s&msg1=%s&btnsendsms=Send+Now'%(ACTION,RECEIVER,MSG)",
+        'allowed_chars' : 140,
+    },
+}
+

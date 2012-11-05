@@ -1,6 +1,12 @@
 #!/usr/bin/python
-from RajivPySms import RajivSmsModule,get_conformation
+from RajivPySms import RajivSmsModule,get_conformation,DATA_DIR
 import RajivPearlsAddon
+import pynotify
+import os
+def notify_me(status,message):
+	pynotify.init("Rajiv-Py-Sms")
+        notification=pynotify.Notification (status,message,"dialog-information")
+        notification.show()
 
 def multiline_input(query=None):
     print "Note: Empty line will conclude getting input from user. Now start typing..."
@@ -25,6 +31,7 @@ def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
         RECEIVER    = raw_input("Receiver no: ")
         MESSAGE     = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+        notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
 
 def start_one_to_one_chat(MyPager, RECEIVER=False):
     'Its like sms chat, simultaneous message to single person'
@@ -38,7 +45,9 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
     while begun == 'y':
         MESSAGE = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+        notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
         begun = raw_input("Want send another sms(y/n): ")
+        
 
 def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=False):
     if not MyPager.config()['Login_status']: 
@@ -61,7 +70,7 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
             RECEIVERS = RECEIVERS.split(',')
         elif option == 'c':
             CONTACT_CSV_FILE = raw_input("Contact csv file name: ")
-            RECEIVERS = [ contact.split(',')[1] for contact in open(CONTACT_CSV_FILE,'r') ]
+            RECEIVERS = [ contact.split(',')[1] for contact in open(os.path.join(DATA_DIR,CONTACT_CSV_FILE)) ]
 
     elif RECEIVERS: RECEIVERS = RECEIVERS.split(',')
 
@@ -75,7 +84,9 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
         return False
 
     for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False)
+    notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
     return True
+
 def rajivpearl_sms(MyPager):
     print """
 +---+------+------+------+------+------+
@@ -97,11 +108,14 @@ def rajivpearl_sms(MyPager):
     elif myoption == 'g':   MESSAGE = RajivPearlsAddon.gold_rate_india()
     elif myoption == 'o':   MESSAGE = RajivPearlsAddon.bk_thought_for_today()
     elif myoption == 'r':   MESSAGE = RajivPearlsAddon.random_blog()
+    else: return 1
     RECEIVER = raw_input('Enter receiver number: ')
     MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
+    notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
 
 def main():
     #======================= You can Run this program as a Stand Alone Console App ===========================
+    notify_me("Hey!!","Rajiv-Py-Sms sample application has been started, enjoy sending FREE sms. Check out special messages option for more available features sms.\n~ Rajiv M")
     MyPager = RajivSmsModule()
     option = '0'
     while option != 'x':
@@ -133,7 +147,7 @@ def main():
         elif option == 'i': send_instant_sms(MyPager)
         elif option == 'c': start_one_to_one_chat(MyPager)
         elif option == 'g': send_group_sms(MyPager)
-        elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE="RajivPySms_contacts.csv")
+        elif option == 'a': send_group_sms(MyPager,CONTACT_CSV_FILE=os.path.join(DATA_DIR,"sms_contact.csv"))
         elif option == 's': MyPager.config(SIGNATURE = raw_input("enter your new sign: "));print "done!!"
         elif option == 'd':
             AVAILABLE_SERVICES = MyPager.config()['AVAILABLE_SERVICES']
@@ -159,6 +173,7 @@ def main():
             elif my_sending_method == 't': MyPager.config( SPLIT_OR_TRUNCATE = False )
         elif option == 'l': MyPager.login()
         elif option != 'x': print 'invalid option'
+    notify_me("You're welcome","Thanks for using Rajiv-Py-Sms sample application")
 
 
 if __name__ == "__main__":

@@ -3,12 +3,13 @@ from time import sleep
 from textwrap import wrap
 import getpass
 from BeautifulSoup import BeautifulSoup
-
+import os
 
 # global variables
-BOT_BROWSER  = eval('('+open('RajivPySms_browserheaders.json').read()+')')
-SERVICE_DATA = eval('('+open('RajivPySms_servicedata.json'   ).read()+')')
-CREDENTIALS  = eval('('+open('RajivPySms_credentials.json'   ).read()+')')
+DATA_DIR = os.path.dirname(os.path.abspath(__file__))
+BOT_BROWSER  = eval('('+open(os.path.join(DATA_DIR,'RajivPySms_browserheaders.json')).read()+')')
+SERVICE_DATA = eval('('+open(os.path.join(DATA_DIR,'RajivPySms_servicedata.json'   )).read()+')')
+CREDENTIALS  = eval('('+open(os.path.join(DATA_DIR,'RajivPySms_credentials.json'   )).read()+')')
 
 
 class RajivSmsModule:

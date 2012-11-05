@@ -1,8 +1,18 @@
 {
-    #                08,09,10,11,12,13,14,15,16,17,18,19,20,21,22
-    "ForexSms"   : [  8,      11,      14,      17,      20,   22 ],
-    "GoldSms"    : [             12                               ],
-    "BkSms"      : [       10                                     ],
-    "BlogSms"    : [       10,      13,      16,      19,      22 ],
-    "WeatherSms" : [          11,      14,      17,      20       ]
-}      
+    # timings for scheduled sms sending
+    "sms_timings": {
+        #                 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22
+        "ForexSms"   : [  8,      11,      14,      17,      20,   22 ],
+        "GoldSms"    : [             12                               ],
+        "BkSms"      : [                13,                           ],
+        "BlogSms"    : [       10,               16,      19,      22 ],
+        "WeatherSms" : [     9,               15,      18,      21    ]
+    },
+    
+    # timings for scheduled tweets
+    "twitter_timings": {
+        #                 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22
+        "BkSms"      : [          11,         15                      ],
+        "BlogSms"    : [       10,      13,      16,      19,      22 ],
+    }
+}

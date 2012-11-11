@@ -1,12 +1,12 @@
 #!/usr/bin/python
 from RajivPySms import RajivSmsModule,get_conformation,DATA_DIR
 import RajivPearlsAddon
-import pynotify
+#import pynotify
 import os
-def notify_me(status,message):
+"""def notify_me(status,message):
 	pynotify.init("Rajiv-Py-Sms")
         notification=pynotify.Notification (status,message,"dialog-information")
-        notification.show()
+        notification.show()"""
 
 def multiline_input(query=None):
     print "Note: Empty line will conclude getting input from user. Now start typing..."
@@ -31,7 +31,7 @@ def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
         RECEIVER    = raw_input("Receiver no: ")
         MESSAGE     = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
-        notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
+        #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
 
 def start_one_to_one_chat(MyPager, RECEIVER=False):
     'Its like sms chat, simultaneous message to single person'
@@ -45,7 +45,7 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
     while begun == 'y':
         MESSAGE = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
-        notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
+        #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
         begun = raw_input("Want send another sms(y/n): ")
         
 
@@ -84,7 +84,7 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
         return False
 
     for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False)
-    notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
+    #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
     return True
 
 def rajivpearl_sms(MyPager):
@@ -111,11 +111,11 @@ def rajivpearl_sms(MyPager):
     else: return 1
     RECEIVER = raw_input('Enter receiver number: ')
     MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
-    notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
+    #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
 
 def main():
     #======================= You can Run this program as a Stand Alone Console App ===========================
-    notify_me("Hey!!","Rajiv-Py-Sms sample application has been started, enjoy sending FREE sms. Check out special messages option for more available features sms.\n~ Rajiv M")
+    #notify_me("Hey!!","Rajiv-Py-Sms sample application has been started, enjoy sending FREE sms. Check out special messages option for more available features sms.\n~ Rajiv M")
     MyPager = RajivSmsModule()
     option = '0'
     while option != 'x':
@@ -173,7 +173,7 @@ def main():
             elif my_sending_method == 't': MyPager.config( SPLIT_OR_TRUNCATE = False )
         elif option == 'l': MyPager.login()
         elif option != 'x': print 'invalid option'
-    notify_me("You're welcome","Thanks for using Rajiv-Py-Sms sample application")
+    #notify_me("You're welcome","Thanks for using Rajiv-Py-Sms sample application")
 
 
 if __name__ == "__main__":

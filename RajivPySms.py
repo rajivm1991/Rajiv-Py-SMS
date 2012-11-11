@@ -145,8 +145,6 @@ def print_browser_response(browser):
     print "+++++++++++++++ Browser Response +++++++++++++++++"
     response = browser.response().info()
     status   = False if 'pragma' in response else True
-    #print "+|",["response: Failure","response: Success"][status]
-    #print "+|",browser.geturl().split('/')[-1].split('.action?')[-1]#.split('&')[0].split('=')[-1].replace('+',' ').replace('%3A',':')
     print "+|",browser.geturl().split('/')[-1]
     print "++++++++++++++++++++++++++++++++++++++++++++++++++"
     return status

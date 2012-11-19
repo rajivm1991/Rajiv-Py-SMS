@@ -1,5 +1,5 @@
 {
-    'way2sms' : {   
+    'way2sms' : {
         'login'         : "'http://site2.way2sms.com/Login1.action?username=%s&password=%s'%(UNAME,PWD)",
         'send'          : "'http://site2.way2sms.com/quicksms.action?MobNo=%s&textArea=%s&HiddenAction=%s&Action=%s&catnamedis=%s'%(RECEIVER,MSG,HIDDEN,ACTION,CATEGORY)",
         'allowed_chars' : 130,
@@ -9,5 +9,10 @@
         'send'          : "'http://www.160by2.com/SendSMSAction?hid_exists=no&action1=%s&mobile1=%s&msg1=%s&btnsendsms=Send+Now'%(ACTION,RECEIVER,MSG)",
         'allowed_chars' : 140,
     },
+    #'fullonsms' :{
+    #    'login'         : "'http://sms.fullonsms.com/login.php?MobileNoLogin=%s&LoginPassword=%s&x=16&y=14'%(UNAME,PWD)",
+    #    'send'          : "'http://sms.fullonsms.com/home.php?ActionScript=/home.php&CancelScript=/home.php&HtmlTemplate=/var/www/html/fullonsms/StaticSpamWarning.html&MessageLength=140&MobileNos=%s&Message=%s&Gender=0&FriendName=Your+Friend+Name&ETemplatesId=&TabValue=contacts'%(RECEIVER,MSG)",
+    #    'allowed_chars' : 140,
+    #},
 }
 

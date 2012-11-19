@@ -24,6 +24,9 @@ CREDENTIALS = eval(
 
 
 class RajivSmsModule:
+    """This class contains core functions of RajivPySms for login and
+    sending sms"""
+
     USER = "No Logged in user"
     SPLIT_OR_TRUNCATE = True  # True - split-mode ; False - truncate-mode
     SIGNATURE = ""
@@ -31,12 +34,14 @@ class RajivSmsModule:
     SERVICE = "way2sms"
 
     def __init__(self):
+        "Performs initialization of Bot browser"
         self.browser = Browser()
         # This is really Cheating with Bot Browser as (firefor/chrome/safari)
         self.browser.addheaders = [('User-agent', BOT_BROWSER['chrome'])]
         self.browser.method = "POST"
 
     def login(self, UNAME='', PWD=''):
+        "Performs Login process of different sms services"
         if not UNAME:
             if CREDENTIALS[self.SERVICE]['login']:
                 UNAME = CREDENTIALS[self.SERVICE]['login']
@@ -61,6 +66,25 @@ class RajivSmsModule:
         return self.Login_status
 
     def config(self, SIGNATURE=None, SPLIT_OR_TRUNCATE=None, SERVICE=None):
+        """This method configures the RajivPySms and returns config details
+        as a dictionary object:
+
+        Arguments:
+        * SIGNATURE         => 'your signature'
+        * SPLIT_OR_TRUNCATE => True(split) | False(truncate)
+        * SERVICE           => 'way2sms' | '160by2'
+
+        Returns:
+        data = {
+            'SIGNATURE': self.SIGNATURE,
+            'SPLIT_OR_TRUNCATE': self.SPLIT_OR_TRUNCATE,
+            'Login_status': self.Login_status,
+            'USER': self.USER,
+            'SERVICE': self.SERVICE,
+            'allowed_chars': SERVICE_DATA[self.SERVICE]['allowed_chars'],
+            'AVAILABLE_SERVICES': SERVICE_DATA.keys(),
+        }
+        """
         if SIGNATURE is not None:
             self.SIGNATURE = SIGNATURE.strip()
         if SPLIT_OR_TRUNCATE is not None:
@@ -82,6 +106,10 @@ class RajivSmsModule:
         return data
 
     def check_message_size(self, MESSAGE):
+        """This method returns
+        * length of final message after adding signatute string
+        * number of split parts if length is > allower characters
+        * the final MESSAGE (appended with signature)"""
         allowed_chars = SERVICE_DATA[self.SERVICE]['allowed_chars']
         MESSAGE = MESSAGE.strip()
         if self.SIGNATURE:
@@ -109,6 +137,13 @@ class RajivSmsModule:
         return length, parts, MESSAGE
 
     def send(self, RECEIVER, MESSAGE, CONFIRM_BEFORE_SENDING=False):
+        """Performs sending sms to receiver
+
+        Arguments:
+        * RECEIVER               => 10 digit receiver mobile number
+        * MESSAGE                => Message text
+        * CONFIRM_BEFORE_SENDING => Confirmation
+        """
         RECEIVER, MESSAGE = RECEIVER.strip(), MESSAGE.strip()
         allowed_chars = SERVICE_DATA[self.SERVICE]['allowed_chars']
         if self.Login_status:
@@ -306,3 +341,5 @@ def Soup_check(html):
         return True
 
     return False
+
+print help(RajivSmsModule)

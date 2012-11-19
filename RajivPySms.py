@@ -219,7 +219,6 @@ def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
     ACTION = "sa65sdf656fdfd"
     UNAME, PWD = UNAME.replace(' ', '').strip(), PWD.replace(' ', '').strip()
     RECEIVER, MSG = RECEIVER.replace(' ', '').strip(), MSG.strip()
-
     replace_chars = [
         ('\n', '%0a'), ('"', '%22'), ('<', '%3c'),
         ('>', '%3e'), ('{', '%7b'), ('}', '%7d'),
@@ -233,7 +232,7 @@ def generate_url(SERVICE, TYPE, UNAME='', PWD='', RECEIVER='', MSG=''):
     ]
     for From, To in replace_chars:
         MSG = MSG.replace(From, To)
-    URL = eval(SERVICE_DATA[SERVICE][TYPE])
+    URL = eval("(" + SERVICE_DATA[SERVICE][TYPE] + ")")
     return URL
 
 
@@ -246,6 +245,9 @@ def get_conformation():
 
 def Soup_check(html):
     soup = BeautifulSoup(html)
+
+    if html == " <script language='javascript' type='text/javascript'>window.location.href = 'http://sms.fullonsms.com/action_main.php';</script>":
+        return True
 
     confirmation160 = soup.find('div', attrs={"class": "h-sta"})
     if confirmation160:
@@ -342,4 +344,3 @@ def Soup_check(html):
 
     return False
 
-print help(RajivSmsModule)

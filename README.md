@@ -7,8 +7,8 @@ This module currently supports following sms services
 
 - 160by2
 - Way2Sms
-- Site2sms (comming soon)
-- FullOnSms (comming soon)
+- Site2sms (coming soon)
+- FullOnSms (coming soon)
 
 Pre-Requirements:
 -----------------

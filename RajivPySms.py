@@ -168,8 +168,10 @@ class RajivSmsModule:
                                 replace_whitespace=False
                             )
                             #trailing text ' [part 01 of 03]'
-                            MSG_list = [MESSAGE[i] + '\n[part %0.2d of \
-                            %0.2d]' % (i + 1, length) for i in range(length)]
+                            print "$ -- test -- " * 10
+                            MSG_list = [MESSAGE[i] + '\n[part %0.2d of %0.2d]'
+                            % (i + 1, parts) for i in range(parts)]
+                            print MSG_list
                         else:
                             MSG_list.append(MESSAGE[:allowed_chars])
                     try:

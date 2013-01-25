@@ -1,41 +1,48 @@
 #!/usr/bin/python
-from RajivPySms import RajivSmsModule,get_conformation,DATA_DIR
+from RajivPySms import RajivSmsModule, get_conformation, DATA_DIR
 import RajivPearlsAddon
 #import pynotify
 import os
 """def notify_me(status,message):
-	pynotify.init("Rajiv-Py-Sms")
+    pynotify.init("Rajiv-Py-Sms")
         notification=pynotify.Notification (status,message,"dialog-information")
         notification.show()"""
 
+
 def multiline_input(query=None):
-    print "Note: Empty line will conclude getting input from user. Now start typing..."
-    if query: print query
+    print "Note: An empty line input will conclude getting input from user. Now start typing..."
+    if query:
+        print query
     Buffer = ''
     while True:
         line = raw_input()
-        if not line: break
-        if Buffer: Buffer += '\n'
+        if not line:
+            break
+        if Buffer:
+            Buffer += '\n'
         Buffer += line
     return Buffer
-        
+
+
 def send_instant_sms(MyPager, RECEIVER=False, MESSAGE=False):
     'instant sms to a receiver'
-    if not MyPager.config()['Login_status']: 
+    if not MyPager.config()['Login_status']:
         print '+++++++++++++++++++++++++'
         print '+| Please login first  |+'
         print '+++++++++++++++++++++++++'
         return False
-    if RECEIVER and MESSAGE: MyPager.send(RECEIVER,MESSAGE)
+    if RECEIVER and MESSAGE:
+        MyPager.send(RECEIVER,MESSAGE)
     else:
         RECEIVER    = raw_input("Receiver no: ")
         MESSAGE     = multiline_input("Your msg: ")
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
         #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
 
+
 def start_one_to_one_chat(MyPager, RECEIVER=False):
     'Its like sms chat, simultaneous message to single person'
-    if not MyPager.config()['Login_status']: 
+    if not MyPager.config()['Login_status']:
         print '+++++++++++++++++++++++++'
         print '+| Please login first  |+'
         print '+++++++++++++++++++++++++'
@@ -47,10 +54,10 @@ def start_one_to_one_chat(MyPager, RECEIVER=False):
         MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
         #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
         begun = raw_input("Want send another sms(y/n): ")
-        
+
 
 def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=False):
-    if not MyPager.config()['Login_status']: 
+    if not MyPager.config()['Login_status']:
         print '+++++++++++++++++++++++++'
         print '+| Please login first  |+'
         print '+++++++++++++++++++++++++'
@@ -77,7 +84,7 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
     elif CONTACT_CSV_FILE: RECEIVERS = [ contact.split(',')[1] for contact in open(CONTACT_CSV_FILE,'r') ]
 
     if not MESSAGE: MESSAGE = multiline_input("Your msg: ")
-    
+
     MyPager.check_message_size(MESSAGE)
     if get_conformation() == 'n':
         print "! sending process stopped.."
@@ -86,6 +93,7 @@ def send_group_sms(MyPager, RECEIVERS=False, CONTACT_CSV_FILE=False, MESSAGE=Fal
     for RECEIVER in RECEIVERS: MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = False)
     #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
     return True
+
 
 def rajivpearl_sms(MyPager):
     print """
@@ -113,6 +121,7 @@ def rajivpearl_sms(MyPager):
     MyPager.send(RECEIVER,MESSAGE,CONFIRM_BEFORE_SENDING = True)
     #notify_me("Woa!!","Cool.. You did a great job..\n~ Rajiv-Py-Sms")
 
+
 def main():
     #======================= You can Run this program as a Stand Alone Console App ===========================
     #notify_me("Hey!!","Rajiv-Py-Sms sample application has been started, enjoy sending FREE sms. Check out special messages option for more available features sms.\n~ Rajiv M")
@@ -121,7 +130,7 @@ def main():
     while option != 'x':
         conf_data = MyPager.config()
         print """
-+---+------+------+------+------+------+------+     
++---+------+------+------+------+------+------+
 |              Main Menu Options              |
 | r - Rajiv Pearl - Special messages          |     +---+---+---+---+---Pager Status:---+---+---+---+---+
 | i - Instant SMS                             |     SMS Service    : %s

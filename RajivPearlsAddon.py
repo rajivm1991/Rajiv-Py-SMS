@@ -5,7 +5,7 @@ from BeautifulSoup import BeautifulSoup
 import bitly
 
 browser = Browser()
-browser.addheaders = [('User-agent', BOT_BROWSER['chrome'] )]
+browser.addheaders = [('User-agent', BOT_BROWSER['safari'] )]
 date = datetime.strftime(datetime.now(),"%B %d, %I:%M %p")
 
 def get_forex_rate(From = 'USD', To = 'INR'):
@@ -27,7 +27,7 @@ def find_in_gdict(Word = 'Error'):
         for primary in result.get('primaries',[]):
             for term in primary.get('terms'):
                 for label in term.get('labels',[]):
-                    if label['title'] == 'Part-of-speech' and label['text'] not in msg: 
+                    if label['title'] == 'Part-of-speech' and label['text'] not in msg:
                         msg += '~'+label['text']+'\n'
                         get_eg = True
             for entry in primary.get('entries'):
@@ -48,7 +48,7 @@ def find_in_gdict(Word = 'Error'):
                 msg = entry.get('terms',[{}])[0].get('text').replace('&quot;','"').replace('&#39;',"'")
                 empty = False
         return unicode(msg.strip(),errors='ignore')
-    else: 
+    else:
         return False
 
 def gold_rate_india():
@@ -69,9 +69,14 @@ def bk_thought_for_today():
     data = browser.open("http://www.bkwsu.org/us/newyork/thoughts").read()
     soup = BeautifulSoup(data)
     thought = soup.find('div', attrs={"id":"thoughtForToday"}).findAll(text=True)
-    for rem in [u'\n',u'&nbsp;']: 
+    for rem in [u'\n',u'&nbsp;']:
         while rem in thought: thought.remove(rem)
-    return 'Om Shanti:\n'+''.join(thought)+"\n~ Brahmakumaris"
+    text = ''.join(thought)
+    if len('Om Shanti:\n' + text) < 140:
+        text = 'Om Shanti:\n' + text
+    if len(text + "\n~ Brahmakumaris") < 140:
+        text = text + "\n~ Brahmakumaris"
+    return text
 
 def random_blog():
     data = browser.open("http://gulzarmanzil.wordpress.com/?random").read()

@@ -28,37 +28,150 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <h1>
+<a name="rajiv-py-sms" class="anchor" href="#rajiv-py-sms"><span class="octicon octicon-link"></span></a>Rajiv-Py-SMS</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>An easy to use Python module for sending SMS.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>This module currently supports following sms services</p>
+
+<ul>
+<li>160by2</li>
+<li>Way2Sms</li>
+<li>Site2sms (coming soon)</li>
+<li>FullOnSms (coming soon)</li>
+</ul><h2>
+<a name="pre-requirements" class="anchor" href="#pre-requirements"><span class="octicon octicon-link"></span></a>Pre-Requirements:</h2>
+
+<p>we need a python package called "mechanize"</p>
+
+<p>you can install it through <strong>sudo pip install mechanize</strong> or the other ways as shown here <a href="http://wwwsearch.sourceforge.net/mechanize/download.html">http://wwwsearch.sourceforge.net/mechanize/download.html</a></p>
+
+<h2>
+<a name="easy-usage-steps" class="anchor" href="#easy-usage-steps"><span class="octicon octicon-link"></span></a>Easy Usage Steps:</h2>
+
+<pre><code>from RajivPySms import RajivSmsModule
+
+MyPager = RajivSmsModule()                              # create a object to use RajivSmsModule
+
+MyPager.login(  UNAME    = '7411129611',
+                PWD      = 'way2smsPassword')           # fill your way2sms login and password
+
+MyPager.send(   RECEIVER = "9952113011",
+                MESSAGE  = "Have a nice day &amp; night..."
+            )                                           
+
+# Wow!!!, your sms has been sent...
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>for the above sending command, the message sent will be look like</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<pre><code>7411129611:
+Have a nice day and night...
+</code></pre>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<h1>
+<a name="rajiv-pearls-addon" class="anchor" href="#rajiv-pearls-addon"><span class="octicon octicon-link"></span></a>Rajiv-Pearls-Addon</h1>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<p>This Pearls Addon provides awesome resources to the Rajiv-Py-SMS module.</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h2>
+<a name="features-of-rajiv-pearls-addon" class="anchor" href="#features-of-rajiv-pearls-addon"><span class="octicon octicon-link"></span></a>Features of Rajiv-Pearls-Addon:</h2>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<ul>
+<li>
+<p><strong>Forex-Rates</strong> of various country's Currencies up-to the current time lively from <strong>XE.com</strong></p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p><strong>Supported currencies:</strong></p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<ul>
+<li>  INR - India Rupees</li>
+<li>  USD - United States Dollars</li>
+<li>  AUD - Australia Dollars</li>
+<li>  CAD - Canada Dollars</li>
+<li>  CHF - Switzerland Francs</li>
+<li>  CNY - China Yuan Renminbi</li>
+<li>  DKK - Denmark Kroner</li>
+<li>  EUR - Euro</li>
+<li>  GBP - United Kingdom Pounds</li>
+<li>  HKD - Hong Kong Dollars</li>
+<li>  HUF - Hungary Forint</li>
+<li>  JPY - Japan Yen</li>
+<li>  MXN - Mexico Pesos</li>
+<li>  MYR - Malaysia Ringgits</li>
+<li>  NOK - Norway Kroner</li>
+<li>  NZD - New Zealand Dollars</li>
+<li>  RUB - Russia Rubles</li>
+<li>  SEK - Sweden Kronor</li>
+<li>  SGD - Singapore Dollars</li>
+<li>  THB - Thailand Baht</li>
+<li>  USD - United States Dollars</li>
+<li>  ZAR - South Africa Rand</li>
+</ul>
+</li>
+<li>
+<p><strong>Google Dictionary</strong></p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>To get the dict meaning of words online, using Google's Dictionary API.</p>
+</li>
+<li>
+<p><strong>Thoughts for Today</strong></p>
+
+<p>To start our day with positive vibrations, get the Brahmakumaris Thoughts for today from BKWSU.org Newyork.</p>
+</li>
+<li>
+<p><strong>Weather Forcast</strong></p>
+
+<p>Feel safety before going out of home by getting the latest updates of Weather forcast of your city from worldweatheronline.com</p>
+</li>
+<li>
+<p><strong>Gold Rates in India</strong></p>
+
+<p>To get the Daily variations in Gold rates in INR. </p>
+
+<p>Includes Rates for 22-Caret and 24-Carets at Chennai, Mumbai, Delhi, Kolkata.</p>
+</li>
+<li>
+<p><strong>Random Post from your Wordpress blog</strong></p>
+
+<p>Will choose a random post from your Wordpress.com blog. (configured default with <a href="http://gulzarmanzil.wordpress.com">http://gulzarmanzil.wordpress.com</a> - My Personal Blog)</p>
+
+<p>Retrives Title and URL of the post.</p>
+
+<p>The highlight is if Title + URL exeeds 130 charecters, the URL will automatically shortened using Optional Bitly library.</p>
+</li>
+</ul><h1>
+<a name="rajivpysms-cron-job-" class="anchor" href="#rajivpysms-cron-job-"><span class="octicon octicon-link"></span></a>RajivPySms-Cron-Job </h1>
+
+<h2>
+<a name="schedule-sms-notification-now-for-free-using-rajivpysms" class="anchor" href="#schedule-sms-notification-now-for-free-using-rajivpysms"><span class="octicon octicon-link"></span></a>Schedule sms Notification now for FREE using RajivPySms</h2>
+
+<p>This is automatic SMS notification sender. All you need to do is edit your cron-job file and point it to RajivPySms_cronjob.py script. </p>
+
+<p>You can configure the RECEIVERS, TIMINGS and Type of Message to send..</p>
+
+<p>Automatic Twitter postings also available. It can be configured with TIMINGS and Type of Message to tweet..</p>
+
+<h2>
+<a name="configuration-details" class="anchor" href="#configuration-details"><span class="octicon octicon-link"></span></a>Configuration Details:</h2>
+
+<ul>
+<li>Add your contacts and configure allowed type of sms for each contact in <strong>RajivPySms_contacts.csv</strong>
+</li>
+<li>Config scheduled sms timings for each type of sms in <strong>RajivPySms_timings.json</strong>
+</li>
+</ul><h2>
+<a name="note" class="anchor" href="#note"><span class="octicon octicon-link"></span></a>Note:</h2>
+
+<ul>
+<li>for fast user experience fill all your accounts and API credentials in <strong>RajivPySms_credentials.json</strong>
+</li>
+<li>refer <strong>sample_application.py</strong> for more options and usages. sample_application.py is a stand-alone console app too :-)</li>
+<li>for more information refer the wiki page of the project( still not done! Need help to document.. )</li>
+<li>your Mobile-No will be prepended with your message text</li>
+<li>your Signature will be appended with your message text</li>
+<li>for setting up scheduled sms notification you should edit your cron job file, call RajivPySms_cronjob.py at 1 hour intervals</li>
+</ul><hr>
         </section>
 
         <aside id="sidebar">
